@@ -5,7 +5,7 @@ def strip_line_breaks(str)
 end
 
 desc "Scrape A1 donor site"
-task :scrape_a1_donor_site do
+task :scrape_a1_donor_site => :environment do
   base_url        = "http://www.elections.il.gov/CampaignDisclosure/"
   donors_list_url = base_url + "ReportsFiled.aspx"
   doc             = Nokogiri::HTML(open(donors_list_url))
@@ -38,13 +38,13 @@ task :scrape_a1_donor_site do
         date            = date.sub("</span>", "")
         received_by     = strip_line_breaks(row.css("td")[3].css("a").text.strip)
         
-        puts contributed_by
-        puts amount
-        puts date
-        puts received_by
-        puts 
-
-        # TODO: save data
+        # save data
+        contribution = Contribution.new
+        contribution.form           = "A-1"
+        contribution.contributed_by = contributed_by
+        contribution.amount         = amount
+        contribution.received_by    = received_by
+        contribution.save
       end
     end
   end
