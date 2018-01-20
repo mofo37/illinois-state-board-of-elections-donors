@@ -36,24 +36,27 @@ task :scrape_a1_donor_site => :environment do
           amount_and_date        = row.css("td")[2].inner_html.strip
           amount, contributed_at = amount_and_date.split("<br>").map{|x| x.strip}
           amount                 = amount.sub("<span>", "")
+
           contributed_at         = contributed_at.sub("</span>", "")
+          month, day, year       = contributed_at.split("/")
+          contributed_at         = Time.new(year, month, day)
+
           received_by            = strip_line_breaks(row.css("td")[3].css("a").text.strip)
           
           # save data
           # TODO add contributed at to db so no dupes
-          # TODO groom and save date
+          # TODO groom and save time
           contribution                = Contribution.new
           contribution.form           = "A-1"
           contribution.contributed_by = contributed_by
           contribution.amount         = amount
           contribution.received_by    = received_by
+          contribution.contributed_at = contributed_at
           contribution.save
+
           
-          puts contributed_by
-          puts amount
-          puts contributed_at
-          puts received_by
-          puts 
+          # puts contribution.inspect
+          # puts 
         end
       end
     end
