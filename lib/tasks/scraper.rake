@@ -18,6 +18,10 @@ task :scrape_a1_donor_site => :environment do
     
     if report_type == "A-1 ($1000+ Year Round)" || report_type == "B-1" # TODO
 
+      # find the date and time
+      filed_at = row.css("td")[3].inner_html.split("<br>").first.sub("<span>", "")
+      filed_at = DateTime.strptime(filed_at, '%m/%d/%Y %I:%M:%S %p')
+
       # find the url
       details_path = report_type_td.css("a").attr("href")
       details_url  = base_url + details_path 
@@ -32,31 +36,26 @@ task :scrape_a1_donor_site => :environment do
         # walk through rows
         details_table.css("tr")[1..-1].each do |row|
           # grab data
-          contributed_by         = strip_line_breaks(row.css("td")[0].text.strip)
-          amount_and_date        = row.css("td")[2].inner_html.strip
-          amount, contributed_at = amount_and_date.split("<br>").map{|x| x.strip}
-          amount                 = amount.sub("<span>", "")
+          contributed_by   = strip_line_breaks(row.css("td")[0].text.strip)
 
-          contributed_at         = contributed_at.sub("</span>", "")
-          month, day, year       = contributed_at.split("/")
-          contributed_at         = Time.new(year, month, day)
+          amount_and_date  = row.css("td")[2].inner_html.strip
+          amount           = amount_and_date.split("<br>").map{|x| x.strip}.first
+          amount           = amount.sub("<span>", "")
 
-          received_by            = strip_line_breaks(row.css("td")[3].css("a").text.strip)
+          received_by      = strip_line_breaks(row.css("td")[3].css("a").text.strip)
           
           # save data
           # TODO add contributed at to db so no dupes
-          # TODO groom and save time
           contribution                = Contribution.new
           contribution.form           = "A-1"
           contribution.contributed_by = contributed_by
           contribution.amount         = amount
           contribution.received_by    = received_by
-          contribution.contributed_at = contributed_at
+          contribution.contributed_at = filed_at
           contribution.save
 
-          
-          # puts contribution.inspect
-          # puts 
+          puts contribution.inspect
+          puts
         end
       end
     end
