@@ -34,6 +34,7 @@ task :scrape_a1_donor_site => :environment do
 
       unless details_table.blank?
         # walk through rows
+        
         details_table.css("tr")[1..-1].each do |row|
           # grab data
           contributed_by   = strip_line_breaks(row.css("td")[0].text.strip)
@@ -43,6 +44,8 @@ task :scrape_a1_donor_site => :environment do
           amount           = amount.sub("<span>", "")
 
           received_by      = strip_line_breaks(row.css("td")[3].css("a").text.strip)
+
+          uid              = row.css("th").first.attr("id")
           
           # save data
           # TODO add contributed at to db so no dupes
@@ -52,6 +55,7 @@ task :scrape_a1_donor_site => :environment do
           contribution.amount         = amount
           contribution.received_by    = received_by
           contribution.contributed_at = filed_at
+          contribution.uid            = uid
           contribution.save
 
           puts contribution.inspect
