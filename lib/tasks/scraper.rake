@@ -15,9 +15,12 @@ task :scrape_a1_donor_site => :environment do
   donors_table[1..-1].each do |row|
     report_type_td = row.css("td")[1]
     report_type    = report_type_td.text.strip
+
     
     if report_type == "A-1 ($1000+ Year Round)" || report_type == "B-1 ($1000+ Year Round)"
       type = report_type[0] == "A" ? "A" : "B"
+
+      payor          = row.css("td")[0].text
 
       # find the date and time
       filed_at = row.css("td")[3].inner_html.split("<br>").first.sub("<span>", "")
@@ -26,6 +29,7 @@ task :scrape_a1_donor_site => :environment do
       # find the url
       details_path = report_type_td.css("a").attr("href")
       details_url  = base_url + details_path 
+
 
       # fetch the url
       details_doc = Nokogiri::HTML(open(details_url))
@@ -42,7 +46,8 @@ task :scrape_a1_donor_site => :environment do
         
         details_table.css("tr")[1..-1].each do |row|
           # grab data
-          # payor            = row.css("td")[0].text
+
+          purpose          = row.css("td")[4].inner_html.sub("<span>", "").sub("</span>", "")
           contributed_by   = strip_line_breaks(row.css("td")[0].text.strip)
 
           amount_and_date  = row.css("td")[2].inner_html.strip
@@ -53,11 +58,15 @@ task :scrape_a1_donor_site => :environment do
 
           uid              = row.css("th").first.attr("id")
           
+          puts purpose
+
           # save data
           # TODO add contributed at to db so no dupes
           contribution                = Contribution.new
           contribution.form           = "#{type}-1"
           # contribution.payor          = payor
+          # contribution.purpose        = purpose
+          # contribution.payee          = payee
           contribution.contributed_by = contributed_by
           contribution.amount         = amount
           contribution.received_by    = received_by
