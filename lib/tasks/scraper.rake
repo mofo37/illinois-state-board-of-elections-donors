@@ -16,7 +16,7 @@ task :scrape_a1_donor_site => :environment do
     report_type_td = row.css("td")[1]
     report_type    = report_type_td.text.strip
     
-    if report_type == "A-1 ($1000+ Year Round)" || report_type == "B-1" # TODO
+    if report_type == "A-1 ($1000+ Year Round)" || report_type == "B-1 ($1000+ Year Round)"
 
       # find the date and time
       filed_at = row.css("td")[3].inner_html.split("<br>").first.sub("<span>", "")
@@ -25,6 +25,9 @@ task :scrape_a1_donor_site => :environment do
       # find the url
       details_path = report_type_td.css("a").attr("href")
       details_url  = base_url + details_path 
+
+      # find payor for B-1's 
+      payor = row.css("td")[0].text
 
       # fetch the url
       details_doc = Nokogiri::HTML(open(details_url))
