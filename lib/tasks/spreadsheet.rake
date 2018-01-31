@@ -181,6 +181,22 @@ namespace :spreadsheet do
     end
 
 
+    worksheet.sheet_data.rows.each_with_index do |row, index|
+      # Sets borders to thin
+      worksheet.change_row_border(index, :left, 'thin')
+      worksheet.change_row_border(index, :right, 'thin')
+      worksheet.change_row_border(index, :bottom, 'thin')
+      worksheet.change_row_border(index, :top, 'thin')
+
+      # Sets borders to black
+      worksheet.change_row_border_color(index, :left, '000000')
+      worksheet.change_row_border_color(index, :right, '000000')
+      worksheet.change_row_border_color(index, :bottom, '000000')
+      worksheet.change_row_border_color(index, :top, '000000')
+    end
+
+
+
     # Save the spreadsheet file
     workbook.write "Report for DATETODO.xlsx"
   end
