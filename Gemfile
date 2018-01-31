@@ -7,7 +7,7 @@ end
 
 gem 'nokogiri'
 
-gem 'simple_xlsx_writer'
+gem 'rubyXL'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
