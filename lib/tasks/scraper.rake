@@ -49,7 +49,7 @@ task :scrape_a1_donor_site => :environment do
           payee            = row.css("td")[0].text
           candidate_name   = row.css("td")[5].text
           purpose          = row.css("td")[4].text
-          
+
           contributed_by   = strip_line_breaks(row.css("td")[0].text.strip)
 
           amount_and_date  = row.css("td")[2].inner_html.strip
@@ -57,22 +57,24 @@ task :scrape_a1_donor_site => :environment do
           amount           = amount.sub("<span>", "")
 
           received_by      = strip_line_breaks(row.css("td")[3].css("a").text.strip)
-
           uid              = row.css("th").first.attr("id")
-          
 
           # save data
-          contribution                = Contribution.new
-          contribution.form           = "#{type}-1"
-          # contribution.payor          = payor
-          # contribution.purpose        = purpose
-          # contribution.payee          = payee
-          # contribution.candidate_name = candidate_name
-          contribution.contributed_by = contributed_by
-          contribution.amount         = amount
-          contribution.received_by    = received_by
-          contribution.contributed_at = filed_at
-          contribution.uid            = uid
+          contribution                   = Contribution.new
+          contribution.form              = "#{type}-1"
+          
+          if type == "B"
+            contribution.payor             = payor
+            contribution.candidate_name    = candidate_name
+            contribution.purpose           = purpose
+            contribution.payee             = payee
+          end
+
+          contribution.contributed_by    = contributed_by
+          contribution.amount            = amount
+          contribution.received_by       = received_by
+          contribution.contributed_at    = filed_at
+          contribution.uid               = uid
           contribution.save
 
           puts contribution.inspect
