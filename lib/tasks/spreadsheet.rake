@@ -1,6 +1,7 @@
 require "rubyXL"
 
 namespace :spreadsheet do
+
   desc "Create spreadsheet of today's contributions"
   task create: :environment do
     # set the date for the current spreadsheet lookup
@@ -22,8 +23,14 @@ namespace :spreadsheet do
     # A-1 headings
     ["Form", "Contributed By", "Amount", "Received By"].each_with_index do |column, index|
       worksheet.add_cell(total_rows, index, column)
-    end
 
+      # Makes cell text bold
+      worksheet.sheet_data[total_rows][index].change_font_bold(true) 
+
+      # Makes cell background black with white text
+      worksheet.sheet_data[total_rows][index].change_fill('000000')
+      worksheet.sheet_data[total_rows][index].change_font_color('ffffff')
+    end
     total_rows = worksheet.sheet_data.rows.length
 
     # A-1 rows
@@ -40,6 +47,13 @@ namespace :spreadsheet do
     # B-1 headings
     ["Form", "Payee", "Amount", "Payor and Purpose"].each_with_index do |column, index|
       worksheet.add_cell(total_rows, index, column)
+
+      # Makes cell text bold
+      worksheet.sheet_data[total_rows][index].change_font_bold(true) 
+
+      # Makes cell background black with white text
+      worksheet.sheet_data[total_rows][index].change_fill('000000')
+      worksheet.sheet_data[total_rows][index].change_font_color('ffffff')
     end
     total_rows += 1
 
@@ -56,6 +70,6 @@ namespace :spreadsheet do
 
     # Save the spreadsheet file
     workbook.write "Report for DATETODO.xlsx"
-
   end
+
 end
