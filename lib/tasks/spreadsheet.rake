@@ -7,9 +7,6 @@ namespace :spreadsheet do
     # set the date for the current spreadsheet lookup
     # reuse that date for filename
 
-    # set page orientation to landscape
-    # set column widths
-
     # get contributions from last 24 hours from database
     # save spreadsheet to... somewhere? S3? Who knows.
 
