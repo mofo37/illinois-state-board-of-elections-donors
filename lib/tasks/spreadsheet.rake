@@ -18,9 +18,10 @@ namespace :spreadsheet do
     worksheet = workbook.worksheets[0]
     worksheet.sheet_name = "Contributions"
 
+    total_rows = worksheet.sheet_data.rows.length
     # A-1 headings
     ["Form", "Contributed By", "Amount", "Received By"].each_with_index do |column, index|
-      worksheet.add_cell(0, index, column)
+      worksheet.add_cell(total_rows, index, column)
     end
 
     total_rows = worksheet.sheet_data.rows.length
