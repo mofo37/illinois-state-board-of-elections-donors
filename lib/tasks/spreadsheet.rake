@@ -28,11 +28,12 @@ namespace :spreadsheet do
     heading_font_color       = "ffffff"
     group_fill_colors        = ["ffffff", "cccccc"]
     current_group_fill_color = 0
+    border_color             = "000000"
 
-    # Font and row sizes
-    font_size  = 12
-    row_height = 20
-
+    # Sizes: font, row and border 
+    font_size   = 12
+    row_height  = 20
+    border_size = "thin"
 
     total_rows = worksheet.sheet_data.rows.length
     # A-1 headings
@@ -47,23 +48,6 @@ namespace :spreadsheet do
       worksheet.sheet_data[total_rows][index].change_font_color heading_font_color
     end
 
-    # Sets row height and font size
-    worksheet.change_row_height    total_rows, row_height
-    worksheet.change_row_font_size total_rows, font_size
-
-    # Sets borders to thin
-    worksheet.change_row_border(total_rows, :left, 'thin')
-    worksheet.change_row_border(total_rows, :right, 'thin')
-    worksheet.change_row_border(total_rows, :bottom, 'thin')
-    worksheet.change_row_border(total_rows, :top, 'thin')
-
-    # Sets borders to black
-    worksheet.change_row_border_color(total_rows, :left, '000000')
-    worksheet.change_row_border_color(total_rows, :right, '000000')
-    worksheet.change_row_border_color(total_rows, :bottom, '000000')
-    worksheet.change_row_border_color(total_rows, :top, '000000')
-
-
     total_rows = worksheet.sheet_data.rows.length
 
 
@@ -76,23 +60,6 @@ namespace :spreadsheet do
           # Sets cell fill color to grey or white by group
           worksheet.sheet_data[total_rows][index].change_fill group_fill_colors[current_group_fill_color]
         end
-
-        # Sets row height and font size
-        worksheet.change_row_height    total_rows, row_height
-        worksheet.change_row_font_size total_rows, font_size
-
-        # Sets borders to thin
-        worksheet.change_row_border(total_rows, :left, 'thin')
-        worksheet.change_row_border(total_rows, :right, 'thin')
-        worksheet.change_row_border(total_rows, :bottom, 'thin')
-        worksheet.change_row_border(total_rows, :top, 'thin')
-
-        # Sets borders to black
-        worksheet.change_row_border_color(total_rows, :left, '000000')
-        worksheet.change_row_border_color(total_rows, :right, '000000')
-        worksheet.change_row_border_color(total_rows, :bottom, '000000')
-        worksheet.change_row_border_color(total_rows, :top, '000000')
-
 
         total_rows += 1
       end
@@ -113,23 +80,6 @@ namespace :spreadsheet do
       worksheet.sheet_data[total_rows][index].change_font_color heading_font_color
     end
 
-    # Sets row height and font size
-    worksheet.change_row_height    total_rows, row_height
-    worksheet.change_row_font_size total_rows, font_size
-
-    # Sets borders to thin
-    worksheet.change_row_border(total_rows, :left, 'thin')
-    worksheet.change_row_border(total_rows, :right, 'thin')
-    worksheet.change_row_border(total_rows, :bottom, 'thin')
-    worksheet.change_row_border(total_rows, :top, 'thin')
-
-    # Sets borders to black
-    worksheet.change_row_border_color(total_rows, :left, '000000')
-    worksheet.change_row_border_color(total_rows, :right, '000000')
-    worksheet.change_row_border_color(total_rows, :bottom, '000000')
-    worksheet.change_row_border_color(total_rows, :top, '000000')
-
-
     total_rows += 1
 
     # Reset group fill color to white
@@ -145,23 +95,6 @@ namespace :spreadsheet do
           # Sets cell fill color to grey or white by group
           worksheet.sheet_data[total_rows][index].change_fill group_fill_colors[current_group_fill_color]
         end
-
-        # Sets row height and font size
-        worksheet.change_row_height    total_rows, row_height
-        worksheet.change_row_font_size total_rows, font_size
-
-        # Sets borders to thin
-        worksheet.change_row_border(total_rows, :left, 'thin')
-        worksheet.change_row_border(total_rows, :right, 'thin')
-        worksheet.change_row_border(total_rows, :bottom, 'thin')
-        worksheet.change_row_border(total_rows, :top, 'thin')
-
-        # Sets borders to black
-        worksheet.change_row_border_color(total_rows, :left, '000000')
-        worksheet.change_row_border_color(total_rows, :right, '000000')
-        worksheet.change_row_border_color(total_rows, :bottom, '000000')
-        worksheet.change_row_border_color(total_rows, :top, '000000')
-
 
         total_rows += 1
       end
@@ -182,23 +115,20 @@ namespace :spreadsheet do
 
 
     worksheet.sheet_data.rows.each_with_index do |row, index|
-      # Sets borders to thin
-      worksheet.change_row_border(index, :left, 'thin')
-      worksheet.change_row_border(index, :right, 'thin')
-      worksheet.change_row_border(index, :bottom, 'thin')
-      worksheet.change_row_border(index, :top, 'thin')
+      # Sets row height and font size
+      worksheet.change_row_height    index, row_height
+      worksheet.change_row_font_size index, font_size
 
-      # Sets borders to black
-      worksheet.change_row_border_color(index, :left, '000000')
-      worksheet.change_row_border_color(index, :right, '000000')
-      worksheet.change_row_border_color(index, :bottom, '000000')
-      worksheet.change_row_border_color(index, :top, '000000')
+      # Sets borders to thin and black
+      %w(top right bottom left).each do |side|
+        worksheet.change_row_border       index, side, border_size
+        worksheet.change_row_border_color index, side, border_color
+      end
     end
 
 
-
     # Save the spreadsheet file
-    workbook.write "Report for DATETODO.xlsx"
+    workbook.write "Report for YYYY-MM-DD.xlsx"
   end
 
 end
