@@ -14,16 +14,31 @@ namespace :contributions do
     donors_list_url = base_url + "ReportsFiled.aspx"
     doc             = Nokogiri::HTML(open(donors_list_url))
 
+    # continue = true
+
+    # while continue do
+    #   # loop through donuts table
+    #   # scrape details page
+    #   # save to daterbase
+    #   # check for "Next" nav link
+    #   # if "Next" absent then continue = false
+    #   # if "Next" present then click the link
+    #   # load next link html into Nokogiri
+    #   # repeat
+    # end
+
+    #   browser = Watir::Browser.new
+
+    #   browser.goto donors_list_url
+    #   browser.link(text: 'Next').click
+
+    #   puts browser.html.class
+    #   raise
+
+
+
     donors_table = doc.css("table#ctl00_ContentPlaceHolder1_tblLatestReportsFiled tr")
 
-
-    browser = Watir::Browser.new
-
-    browser.goto 'http://www.elections.il.gov/CampaignDisclosure/ReportsFiled.aspx'
-    browser.link(text: 'Next').click
-
-    puts browser.html
-    raise
 
     donors_table[1..-1].each do |row|
       report_type_td = row.css("td")[1]
