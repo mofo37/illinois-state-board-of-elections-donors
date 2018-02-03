@@ -1,4 +1,6 @@
 require "open-uri"
+require "watir"
+# require "mechanize"
 
 def strip_line_breaks(str)
   str.gsub("\r", "").gsub("\n", "")
@@ -13,8 +15,15 @@ namespace :contributions do
     doc             = Nokogiri::HTML(open(donors_list_url))
 
     donors_table = doc.css("table#ctl00_ContentPlaceHolder1_tblLatestReportsFiled tr")
-    
-    # next_link = doc.css("#ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext")
+
+
+    browser = Watir::Browser.new
+
+    browser.goto 'http://www.elections.il.gov/CampaignDisclosure/ReportsFiled.aspx'
+    browser.link(text: 'Next').click
+
+    puts browser.html
+    raise
 
     donors_table[1..-1].each do |row|
       report_type_td = row.css("td")[1]
