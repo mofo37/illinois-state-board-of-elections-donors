@@ -1,9 +1,9 @@
 require "rubyXL"
 
-namespace :spreadsheet do
+namespace :contributions do
 
   desc "Create spreadsheet of today's contributions"
-  task create: :environment do
+  task spreadsheet: :environment do
     # set the date for the current spreadsheet lookup
     # reuse that date for filename
 
