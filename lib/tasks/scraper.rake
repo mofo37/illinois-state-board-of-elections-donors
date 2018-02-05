@@ -30,11 +30,11 @@ namespace :contributions do
         if report_type == "A-1 ($1000+ Year Round)" || report_type == "B-1 ($1000+ Year Round)"
           type = report_type[0] == "A" ? "A" : "B"
 
-          payor    = row.css("td")[0].text
+          payor = row.css("td")[0].text
 
           # find the date and time
           filed_at = row.css("td")[3].inner_html.split("<br>").first.sub("<span>", "")
-          filed_at = DateTime.strptime(filed_at, '%m/%d/%Y %I:%M:%S %p')
+          filed_at = DateTime.strptime(filed_at, "%m/%d/%Y %I:%M:%S %p")
 
           # find the url
           details_path = report_type_td.css("a").attr("href")
@@ -42,55 +42,83 @@ namespace :contributions do
 
 
           # fetch the url
-          details_doc = Nokogiri::HTML(open(details_url))
+          details_browser = Watir::Browser.new
+          details_browser.goto details_url
 
-          # find the table on the new page
-          # table_id = "table#ct100_ContentPlaceHolder1_tbl#{type}1List"
-          # puts table_id
-          # details_table = details_doc.css(table_id)
-          # puts details_table
-          details_table = details_doc.css("table").last
+          details_doc = Nokogiri::HTML(details_browser.html)
+          inner_continue = true 
+          inner_index = 1
 
-          unless details_table.blank?
-            # walk through rows
-            
-            details_table.css("tr")[1..-1].each do |row|
-              # grab data
-              payee            = row.css("td")[0].text
-              candidate_name   = row.css("td")[5].text
-              purpose          = row.css("td")[4].text
+          while inner_continue do
 
-              contributed_by   = strip_line_breaks(row.css("td")[0].text.strip)
+            # find the table on the new page
+            # table_id = "table#ct100_ContentPlaceHolder1_tbl#{type}1List"
+            # puts table_id
+            # details_table = details_doc.css(table_id)
+            # puts details_table
+            details_table = details_doc.css("table").last
 
-              amount_and_date  = row.css("td")[2].inner_html.strip
-              amount           = amount_and_date.split("<br>").map{|x| x.strip}.first
-              amount           = amount.sub("<span>", "")
+            unless details_table.blank?
+              # walk through rows
+              
+              details_table.css("tr")[1..-1].each do |row|
+                # grab data
+                payee            = row.css("td")[0].text
+                candidate_name   = row.css("td")[5].text
+                purpose          = row.css("td")[4].text
 
-              received_by      = strip_line_breaks(row.css("td")[3].css("a").text.strip)
-              uid              = row.css("th").first.attr("id")
+                contributed_by   = strip_line_breaks(row.css("td")[0].text.strip)
 
-              # save data
-              contribution                   = Contribution.new
-              contribution.form              = "#{type}-1"
+                amount_and_date  = row.css("td")[2].inner_html.strip
+                amount           = amount_and_date.split("<br>").map{|x| x.strip}.first
+                amount           = amount.sub("<span>", "")
 
-              if type == "B"
-                contribution.payor             = payor
-                contribution.candidate_name    = candidate_name
-                contribution.purpose           = purpose
-                contribution.payee             = payee
+                received_by      = strip_line_breaks(row.css("td")[3].css("a").text.strip)
+                uid              = row.css("th").first.attr("id")
+
+                # save data
+                contribution                   = Contribution.new
+                contribution.form              = "#{type}-1"
+
+                if type == "B"
+                  contribution.payor             = payor
+                  contribution.candidate_name    = candidate_name
+                  contribution.purpose           = purpose
+                  contribution.payee             = payee
+                end
+
+                contribution.contributed_by    = contributed_by
+                contribution.amount            = amount
+                contribution.received_by       = received_by
+                contribution.contributed_at    = filed_at
+                contribution.uid               = uid
+                contribution.save
+
+                puts contribution.inspect
+                puts
               end
-
-              contribution.contributed_by    = contributed_by
-              contribution.amount            = amount
-              contribution.received_by       = received_by
-              contribution.contributed_at    = filed_at
-              contribution.uid               = uid
-              contribution.save
-
-              puts contribution.inspect
-              puts
             end
-          end
+
+            inner_next_link = details_doc.css("a")&.map{|a| a if a.text == "Next"}.compact.first
+
+            puts
+            puts "*"*80
+            puts inner_index
+            puts "*"*80
+            puts
+
+            if !inner_next_link
+              inner_continue = false
+              details_browser.close
+            elsif inner_next_link.attr("disabled").blank?
+              details_browser.link(id: "ctl00_ContentPlaceHolder1_Listnavigation_btnPageNext").click
+              details_doc = Nokogiri::HTML(details_browser.html)
+              inner_index += 1
+            elsif inner_next_link.attr("disabled").present?
+              inner_continue = false
+            end 
+
+          end # inner_continue
         end # if report type
           
           # "#ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext"
@@ -108,7 +136,7 @@ namespace :contributions do
 
       # don't click next link if on last page
       if next_link.attr("disabled").blank?
-        browser.link(id: 'ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext').click
+        browser.link(id: "ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext").click
         doc = Nokogiri::HTML(browser.html)
         index += 1
       else
