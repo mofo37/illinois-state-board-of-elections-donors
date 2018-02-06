@@ -125,7 +125,8 @@ namespace :contributions do
 
 
     # Save the spreadsheet file
-    workbook.write "Report for YYYY-MM-DD.xlsx"
+    date = Time.now.strftime("%m-%d-%Y")
+    workbook.write "#{Rails.root}/tmp/Report for #{date}.xlsx"
   end
 
 end
