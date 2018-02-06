@@ -6,6 +6,7 @@ class SubscriberMailer < ApplicationMailer
     spreadsheet_file = "Report for #{date}.xlsx"
     spreadsheet_file_path = "tmp/#{spreadsheet_file.gsub(" ", "\ ")}"
 
-    mail to: email, subject: "A1 and B1 Report for #{date}", attachments[spreadsheet_file] = File.read(spreadsheet_file_path)
+    attachments[spreadsheet_file] = File.read(spreadsheet_file_path)
+    mail to: email, subject: "A1 and B1 Report for #{date}", 
   end
 end
