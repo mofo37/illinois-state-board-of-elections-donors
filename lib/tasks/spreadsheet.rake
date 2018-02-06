@@ -126,7 +126,14 @@ namespace :contributions do
 
     # Save the spreadsheet file
     date = Time.now.strftime("%m-%d-%Y")
-    workbook.write "#{Rails.root}/tmp/Report for #{date}.xlsx"
+    t = workbook.write "#{Rails.root}/tmp/Report for #{date}.xlsx"
+
+    puts t.inspect
+    puts
+    puts File.read t
+    puts
+
+    # tt = Tempfile.new ["Report for #{date}", ".xlsx"], "#{Rails.root}/tmp"
   end
 
 end
