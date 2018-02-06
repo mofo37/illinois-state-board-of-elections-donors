@@ -126,7 +126,7 @@ namespace :contributions do
 
     # Save the spreadsheet file
     date = Time.now.strftime("%m-%d-%Y")
-    t = workbook.write "#{Rails.root}/tmp/Report for #{date}.xlsx"
+    t = workbook.write "#{Rails.root}/tmp/Report-for-#{date}.xlsx"
 
     puts t.inspect
     puts
