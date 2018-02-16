@@ -1,0 +1,14 @@
+<h1>Spreadsheets</h1>
+
+<h2>
+  <small>Latest Spreadsheet</small><br>
+  <%= link_to @latest_spreadsheet.url, @latest_spreadsheet.url %>
+</h2>
+
+<ul>
+  <% @spreadsheets.each do |spreadsheet| %>
+    <li>
+      <%= link_to spreadsheet.url, spreadsheet.url %>
+    </li>
+  <% end %>
+</ul>

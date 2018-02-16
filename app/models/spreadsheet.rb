@@ -1,0 +1,2 @@
+class Spreadsheet < ApplicationRecord
+end

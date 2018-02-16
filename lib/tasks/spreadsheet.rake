@@ -167,6 +167,8 @@ namespace :contributions do
 
     download_url = [bucket_url, file_name].join("/")
 
+    Spreadsheet.create! url: download_url
+
     a1s.update_all(delivered_at: Time.now)
     b1s.update_all(delivered_at: Time.now)
   end
