@@ -11,8 +11,8 @@ namespace :contributions do
     # save spreadsheet to... somewhere? S3? Who knows.
 
     contributions = Contribution.all
-    a1s = contributions.where(form: "A-1").limit(10)
-    b1s = contributions.where(form: "B-1").limit(10)
+    a1s = contributions.where(form: "A-1").where(delivered_at: nil)
+    b1s = contributions.where(form: "B-1").where(delivered_at: nil)
 
 
     # Make a new spreadsheet
@@ -123,17 +123,8 @@ namespace :contributions do
       end
     end
 
-
-    # Save the spreadsheet file
-    date = Time.now.strftime("%m-%d-%Y")
-    t = workbook.write "#{Rails.root}/tmp/Report-for-#{date}.xlsx"
-
-    puts t.inspect
-    puts
-    puts File.read t
-    puts
-
-    # tt = Tempfile.new ["Report for #{date}", ".xlsx"], "#{Rails.root}/tmp"
+    a1s.update_all(delivered_at: Time.now)
+    b1s.update_all(delivered_at: Time.now)
   end
 
 end

@@ -1,7 +1,7 @@
 require "open-uri"
 require "watir"
 
-def strip_line_breaks(str)
+def strip_line_breaks(str)  
   str.gsub("\r", "").gsub("\n", "")
 end
 
