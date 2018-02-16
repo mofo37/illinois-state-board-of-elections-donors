@@ -1,4 +1,6 @@
 require "rubyXL"
+require 'aws-sdk'
+
 
 namespace :contributions do
 
@@ -124,10 +126,49 @@ namespace :contributions do
     end
 
     date = Time.now.strftime("%m-%d-%Y")
-    t = workbook.write "#{Rails.root}/tmp/Report for #{date}.xlsx"
+    file_name = "Report-for-#{date}.xlsx"
+    file = workbook.write "#{Rails.root}/tmp/#{file_name}"
 
-    # a1s.update_all(delivered_at: Time.now)
-    # b1s.update_all(delivered_at: Time.now)
+    Aws.config.update({
+      region: 'us-east-1',
+      credentials: Aws::Credentials.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
+    })
+
+    # client is for making file public. s3 is for file upload.
+    client = Aws::S3::Client.new
+    s3 = Aws::S3::Resource.new
+
+    # reference an existing bucket by name
+    bucket_name = ENV["S3_BUCKET"]
+    bucket = s3.bucket(bucket_name)
+    bucket_url = bucket.url
+
+    # Sets a bucket to public-read
+    client.put_bucket_acl({
+      acl: "public-read",
+      bucket: bucket_name,
+    })
+
+    # Get just the file name
+    name = File.basename(file)
+
+    # Create the object to upload
+    obj = s3.bucket(bucket_name).object(name)
+
+    # Upload it      
+    obj.upload_file(file)
+
+    # Setting the object to public-read
+    client.put_object_acl({
+      acl: "public-read",
+      bucket: bucket_name,
+      key: file_name,
+    })
+
+    download_url = [bucket_url, file_name].join("/")
+
+    a1s.update_all(delivered_at: Time.now)
+    b1s.update_all(delivered_at: Time.now)
   end
 
 end
