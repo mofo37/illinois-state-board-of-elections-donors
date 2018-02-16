@@ -123,8 +123,11 @@ namespace :contributions do
       end
     end
 
-    a1s.update_all(delivered_at: Time.now)
-    b1s.update_all(delivered_at: Time.now)
+    date = Time.now.strftime("%m-%d-%Y")
+    t = workbook.write "#{Rails.root}/tmp/Report for #{date}.xlsx"
+
+    # a1s.update_all(delivered_at: Time.now)
+    # b1s.update_all(delivered_at: Time.now)
   end
 
 end
