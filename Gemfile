@@ -10,7 +10,7 @@ gem 'dotenv-rails', groups: [:development, :test]
 gem 'nokogiri'
 gem 'rubyXL'
 gem 'watir'
-gem 'dotenv-rails'
+gem 'aws-sdk', '~> 2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
