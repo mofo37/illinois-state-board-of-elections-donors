@@ -3,7 +3,7 @@ class SpreadsheetsController < ApplicationController
 
   # GET /spreadsheets
   def index
-    @spreadsheets = Spreadsheet.all.to_a
+    @spreadsheets = Spreadsheet.order(created_at: :desc).to_a
     @latest_spreadsheet = @spreadsheets.shift
   end
 

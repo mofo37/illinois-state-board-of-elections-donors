@@ -12,9 +12,8 @@ namespace :contributions do
     # get contributions from last 24 hours from database
     # save spreadsheet to... somewhere? S3? Who knows.
 
-    contributions = Contribution.all
-    a1s = contributions.where(form: "A-1").where(delivered_at: nil)
-    b1s = contributions.where(form: "B-1").where(delivered_at: nil)
+    a1s = Contribution.where(form: "A-1").where(delivered_at: nil)
+    b1s = Contribution.where(form: "B-1").where(delivered_at: nil)
 
 
     # Make a new spreadsheet
@@ -125,7 +124,7 @@ namespace :contributions do
       end
     end
 
-    date = Time.now.strftime("%m-%d-%Y")
+    date = a1s.first.contributed_at.strftime("%m-%d-%Y")
     file_name = "Report-for-#{date}.xlsx"
     file = workbook.write "#{Rails.root}/tmp/#{file_name}"
 

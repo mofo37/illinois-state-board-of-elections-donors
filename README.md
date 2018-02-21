@@ -1,5 +1,6 @@
 # TODO 
 
+- change spreadsheet file name/date relative to contributions date
 - add pagination
 - add bootstrap
 

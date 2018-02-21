@@ -116,6 +116,7 @@ namespace :contributions do
               inner_index += 1
             elsif inner_next_link.attr("disabled").present?
               inner_continue = false
+              details_browser.close
             end 
 
           end # inner_continue
@@ -142,6 +143,7 @@ namespace :contributions do
       else
         # exit when there is no next link
         continue = false
+        browser.close
       end
     end # while
       
