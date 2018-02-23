@@ -27,7 +27,8 @@ namespace :contributions do
         report_type    = report_type_td.text.strip
 
         
-        if report_type == "A-1 ($1000+ Year Round)" || report_type == "B-1 ($1000+ Year Round)"
+        if report_type == "A-1 ($1000+ Year Round)" ||
+           report_type == "B-1 ($1000+ Year Round)"
           type = report_type[0] == "A" ? "A" : "B"
 
           payor = row.css("td")[0].text
@@ -128,12 +129,6 @@ namespace :contributions do
     
       # find next link
       next_link = doc.css("a")&.map{|a| a if a.text == "Next"}.compact.first
-      
-      puts
-      puts "*"*80
-      puts index
-      puts "*"*80
-      puts
 
       # don't click next link if on last page
       if next_link.attr("disabled").blank?
