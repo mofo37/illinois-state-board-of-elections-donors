@@ -13,7 +13,24 @@ namespace :contributions do
     donors_list_url = base_url + "ReportsFiled.aspx"
 
     browser = Watir::Browser.new
-    browser.goto donors_list_url
+
+    attempts = 0
+    loop do
+      begin
+        browser.goto donors_list_url
+      rescue => Net::ReadTimeout
+        attempts += 1
+        puts "WARNING: 'browser.goto donors_list_url' timed out #{attempts} times."
+        sleep 5 * attempts
+      end
+
+      if attempts > 3
+        puts "ERROR: 'browser.goto donors_list_url' timed out 3 times. Exiting…"
+        exit 1
+      end
+
+      break if browser.html.present?
+    end
 
     doc = Nokogiri::HTML(browser.html)
     continue = true
@@ -41,10 +58,26 @@ namespace :contributions do
           details_path = report_type_td.css("a").attr("href")
           details_url  = base_url + details_path 
 
-
           # fetch the url
           details_browser = Watir::Browser.new
-          details_browser.goto details_url
+
+          inner_attempts = 0
+          loop do
+            begin
+              details_browser.goto details_url
+            rescue => Net::ReadTimeout
+              inner_attempts += 1
+              puts "WARNING: 'details_browser.goto details_url' timed out #{inner_attempts} times."
+              sleep 5 * inner_attempts
+            end
+
+            if inner_attempts > 3
+              puts "ERROR: 'details_browser.goto details_url' timed out 3 times. Exiting…"
+              exit 1
+            end
+
+            break if details_browser.html.present?
+          end
 
           details_doc = Nokogiri::HTML(details_browser.html)
           inner_continue = true 
@@ -105,7 +138,7 @@ namespace :contributions do
 
             puts
             puts "*"*80
-            puts inner_index
+            puts "Details page number: #{inner_index}"
             puts "*"*80
             puts
 
