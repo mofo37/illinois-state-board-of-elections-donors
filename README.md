@@ -1,9 +1,9 @@
 # TODO 
 
-- take out employer and occupation of contributed by
-- change spreadsheet file name/date relative to contributions date
+- fix duplication in spreadsheet
 - add pagination
 - add bootstrap
+- add kill switch to scraper
 
 - send email using AWS
 - figure out where to store spreadsheet before send
