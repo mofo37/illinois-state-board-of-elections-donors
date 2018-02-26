@@ -64,19 +64,19 @@ namespace :contributions do
               
               details_table.css("tr")[1..-1].each do |row|
                 # grab data
-                payee            = row.css("td")[0].text
-                candidate_name   = row.css("td")[5].text
-                purpose          = row.css("td")[4].text
+                payee           = row.css("td")[0].text
+                candidate_name  = row.css("td")[5].text
+                purpose         = row.css("td")[4].text
 
-                contributed_by   = strip_line_breaks(row.css("td")[0].text.strip)
-                contributed_by   = contributed_by.split("Occupation: ").first
+                contributed_by  = strip_line_breaks(row.css("td")[0].text.strip)
+                contributed_by  = contributed_by.split("Occupation: ").first
 
-                amount_and_date  = row.css("td")[2].inner_html.strip
-                amount           = amount_and_date.split("<br>").map{|x| x.strip}.first
-                amount           = amount.sub("<span>", "")
+                amount_and_date = row.css("td")[2].inner_html.strip
+                amount          = amount_and_date.split("<br>").map{|x| x.strip}.first
+                amount          = amount.sub("<span>", "")
 
-                received_by      = strip_line_breaks(row.css("td")[3].css("a").text.strip)
-                uid              = row.css("th").first.attr("id")
+                received_by     = strip_line_breaks(row.css("td")[3].css("a").text.strip)
+                uid             = row.css("th").first.attr("id")
 
                 # save data
                 contribution                   = Contribution.new
