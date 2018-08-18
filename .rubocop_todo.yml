@@ -1,8 +1,3 @@
-# Configuration parameters: AllowSafeAssignment.
-Lint/AssignmentInCondition:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
-
 # Configuration parameters: CountBlocks.
 Metrics/BlockNesting:
   Max: 6
