@@ -29,12 +29,6 @@ Lint/ShadowingOuterLocalVariable:
 Metrics/BlockNesting:
   Max: 6
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Performance/StringReplacement:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
-
 # Offense count: 6
 Style/CommentedKeyword:
   Exclude:
