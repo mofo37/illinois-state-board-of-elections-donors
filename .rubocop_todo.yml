@@ -87,11 +87,3 @@ Style/PercentLiteralDelimiters:
 Style/StringLiterals:
   Exclude:
     - 'lib/tasks/scraper.rake'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoredMethods.
-# IgnoredMethods: respond_to, define_method
-Style/SymbolProc:
-  Exclude:
-    - 'lib/tasks/scraper.rake'

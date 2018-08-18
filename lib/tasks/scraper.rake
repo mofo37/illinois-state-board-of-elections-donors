@@ -130,7 +130,7 @@ namespace :contributions do
                   contributed_by  = contributed_by.split("Occupation: ").first
 
                   amount_and_date = row.css("td")[2].inner_html.strip
-                  amount          = amount_and_date.split("<br>").map { |x| x.strip }.first
+                  amount          = amount_and_date.split("<br>").map(&:strip).first
                   amount          = amount.sub("<span>", "")
 
                   received_by     = strip_line_breaks(row.css("td")[3].css("a").text.strip)
