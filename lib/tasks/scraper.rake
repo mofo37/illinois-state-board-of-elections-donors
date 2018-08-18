@@ -161,7 +161,8 @@ namespace :contributions do
             end
           end
 
-          inner_next_link = details_doc.css('a')&.map { |a| a if a.text == 'Next' }.compact.first
+          inner_pagination_links = details_doc.css('a')&.map { |a| a if a.text == 'Next' }
+          inner_next_link        = inner_pagination_links.compact.first
 
           puts
           puts '*' * 80
@@ -189,7 +190,8 @@ namespace :contributions do
         # donors_table.each
       end
       # find next link
-      next_link = doc.css('a')&.map { |a| a if a.text == 'Next' }.compact.first
+      pagination_links = doc.css('a')&.map { |a| a if a.text == 'Next' }
+      next_link        = pagination_links.compact.first
 
       # don't click next link if on last page
       if next_link.attr('disabled').blank?
