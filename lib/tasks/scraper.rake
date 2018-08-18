@@ -49,7 +49,7 @@ namespace :contributions do
         browser.goto donors_list_url
       rescue Net::ReadTimeout
         attempts += 1
-        puts "WARNING: 'browser.goto donors_list_url' timed out #{ attempts } times."
+        puts "WARNING: 'browser.goto donors_list_url' timed out #{attempts} times."
         sleep 5 * attempts
       end
 
@@ -72,9 +72,8 @@ namespace :contributions do
         report_type_td = row.css("td")[1]
         report_type    = report_type_td.text.strip
 
-
         if report_type == "A-1 ($1000+ Year Round)" ||
-          report_type == "B-1 ($1000+ Year Round)"
+           report_type == "B-1 ($1000+ Year Round)"
           type = report_type[0] == "A" ? "A" : "B"
 
           payor = row.css("td")[0].text
@@ -100,7 +99,7 @@ namespace :contributions do
                 details_browser.goto details_url
               rescue Net::ReadTimeout
                 inner_attempts += 1
-                puts "WARNING: 'details_browser.goto details_url' timed out #{ inner_attempts } times."
+                puts "WARNING: 'details_browser.goto details_url' timed out #{inner_attempts} times."
                 sleep 5 * inner_attempts
               end
 
@@ -131,23 +130,23 @@ namespace :contributions do
                   contributed_by  = contributed_by.split("Occupation: ").first
 
                   amount_and_date = row.css("td")[2].inner_html.strip
-                  amount          = amount_and_date.split("<br>").map{ |x| x.strip }.first
+                  amount          = amount_and_date.split("<br>").map { |x| x.strip }.first
                   amount          = amount.sub("<span>", "")
 
                   received_by     = strip_line_breaks(row.css("td")[3].css("a").text.strip)
                   uid             = row.css("th").first.attr("id")
 
                   # save data
-                  form = "#{ type }-1"
+                  form = "#{type}-1"
 
                   contribution = Contribution.find_or_create_by({
-                    form:           form,
-                    contributed_by: contributed_by,
-                    amount:         amount,
-                    received_by:    received_by,
-                    contributed_at: filed_at,
-                    uid:            uid,
-                  })
+                                                                  form:           form,
+                                                                  contributed_by: contributed_by,
+                                                                  amount:         amount,
+                                                                  received_by:    received_by,
+                                                                  contributed_at: filed_at,
+                                                                  uid:            uid,
+                                                                })
 
                   if type == "B"
                     contribution.payor          = payor
@@ -162,12 +161,12 @@ namespace :contributions do
                 end
               end
 
-              inner_next_link = details_doc.css("a")&.map{ |a| a if a.text == "Next" }.compact.first
+              inner_next_link = details_doc.css("a")&.map { |a| a if a.text == "Next" }.compact.first
 
               puts
-              puts "*"*80
-              puts "Details page number: #{ inner_index }"
-              puts "*"*80
+              puts "*" * 80
+              puts "Details page number: #{inner_index}"
+              puts "*" * 80
               puts
 
               if !inner_next_link
@@ -190,7 +189,7 @@ namespace :contributions do
         end # donors_table.each
       end
       # find next link
-      next_link = doc.css("a")&.map{ |a| a if a.text == "Next" }.compact.first
+      next_link = doc.css("a")&.map { |a| a if a.text == "Next" }.compact.first
 
       # don't click next link if on last page
       if next_link.attr("disabled").blank?
