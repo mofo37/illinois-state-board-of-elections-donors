@@ -1,7 +1,7 @@
 require "open-uri"
 require "watir"
 
-def strip_line_breaks(str)  
+def strip_line_breaks(str)
   str.gsub("\r", "").gsub("\n", "")
 end
 
@@ -72,9 +72,9 @@ namespace :contributions do
         report_type_td = row.css("td")[1]
         report_type    = report_type_td.text.strip
 
-        
+
         if report_type == "A-1 ($1000+ Year Round)" ||
-           report_type == "B-1 ($1000+ Year Round)"
+          report_type == "B-1 ($1000+ Year Round)"
           type = report_type[0] == "A" ? "A" : "B"
 
           payor = row.css("td")[0].text
@@ -86,127 +86,127 @@ namespace :contributions do
           # find the url
           cats = report_type_td.css("a")
           unless cats.blank?
-          details_path = report_type_td.css("a").attr("href")
+            details_path = report_type_td.css("a").attr("href")
 
-              details_url  = base_url + details_path 
-              puts details_url.inspect
+            details_url  = base_url + details_path
+            puts details_url.inspect
 
-              # fetch the url
-              details_browser = new_browser
+            # fetch the url
+            details_browser = new_browser
 
-              inner_attempts = 0
-              loop do
-                begin
-                  details_browser.goto details_url
-                rescue Net::ReadTimeout
-                  inner_attempts += 1
-                  puts "WARNING: 'details_browser.goto details_url' timed out #{ inner_attempts } times."
-                  sleep 5 * inner_attempts
-                end
-
-                if inner_attempts > 3
-                  puts "ERROR: 'details_browser.goto details_url' timed out 3 times. Exiting…"
-                  exit 1
-                end
-
-                break if details_browser.html.present?
+            inner_attempts = 0
+            loop do
+              begin
+                details_browser.goto details_url
+              rescue Net::ReadTimeout
+                inner_attempts += 1
+                puts "WARNING: 'details_browser.goto details_url' timed out #{ inner_attempts } times."
+                sleep 5 * inner_attempts
               end
 
-              details_doc = Nokogiri::HTML(details_browser.html)
-              inner_continue = true 
-              inner_index = 1
+              if inner_attempts > 3
+                puts "ERROR: 'details_browser.goto details_url' timed out 3 times. Exiting…"
+                exit 1
+              end
 
-              while inner_continue do
-                details_table = details_doc.css("table").last
+              break if details_browser.html.present?
+            end
 
-                unless details_table.blank?
-                  # walk through rows
-                  details_table.css("tr")[1..-1].each do |row|
-                    # grab data
-                    payee           = row.css("td")[0].text
-                    candidate_name  = row.css("td")[5].text
-                    purpose         = row.css("td")[4].text
+            details_doc = Nokogiri::HTML(details_browser.html)
+            inner_continue = true
+            inner_index = 1
 
-                    contributed_by  = strip_line_breaks(row.css("td")[0].text.strip)
-                    contributed_by  = contributed_by.split("Occupation: ").first
+            while inner_continue do
+              details_table = details_doc.css("table").last
 
-                    amount_and_date = row.css("td")[2].inner_html.strip
-                    amount          = amount_and_date.split("<br>").map{ |x| x.strip }.first
-                    amount          = amount.sub("<span>", "")
+              unless details_table.blank?
+                # walk through rows
+                details_table.css("tr")[1..-1].each do |row|
+                  # grab data
+                  payee           = row.css("td")[0].text
+                  candidate_name  = row.css("td")[5].text
+                  purpose         = row.css("td")[4].text
 
-                    received_by     = strip_line_breaks(row.css("td")[3].css("a").text.strip)
-                    uid             = row.css("th").first.attr("id")
+                  contributed_by  = strip_line_breaks(row.css("td")[0].text.strip)
+                  contributed_by  = contributed_by.split("Occupation: ").first
 
-                    # save data
-                    form = "#{ type }-1"
+                  amount_and_date = row.css("td")[2].inner_html.strip
+                  amount          = amount_and_date.split("<br>").map{ |x| x.strip }.first
+                  amount          = amount.sub("<span>", "")
 
-                    contribution = Contribution.find_or_create_by({
-                      form:           form,
-                      contributed_by: contributed_by,
-                      amount:         amount,
-                      received_by:    received_by,
-                      contributed_at: filed_at,
-                      uid:            uid,
-                    })
+                  received_by     = strip_line_breaks(row.css("td")[3].css("a").text.strip)
+                  uid             = row.css("th").first.attr("id")
 
-                    if type == "B"
-                      contribution.payor          = payor
-                      contribution.candidate_name = candidate_name
-                      contribution.purpose        = purpose
-                      contribution.payee          = payee
-                    end
+                  # save data
+                  form = "#{ type }-1"
 
-                    contribution.save
-                    puts contribution.inspect
-                    puts
+                  contribution = Contribution.find_or_create_by({
+                    form:           form,
+                    contributed_by: contributed_by,
+                    amount:         amount,
+                    received_by:    received_by,
+                    contributed_at: filed_at,
+                    uid:            uid,
+                  })
+
+                  if type == "B"
+                    contribution.payor          = payor
+                    contribution.candidate_name = candidate_name
+                    contribution.purpose        = purpose
+                    contribution.payee          = payee
                   end
+
+                  contribution.save
+                  puts contribution.inspect
+                  puts
                 end
+              end
 
-                inner_next_link = details_doc.css("a")&.map{ |a| a if a.text == "Next" }.compact.first
+              inner_next_link = details_doc.css("a")&.map{ |a| a if a.text == "Next" }.compact.first
 
-                puts
-                puts "*"*80
-                puts "Details page number: #{ inner_index }"
-                puts "*"*80
-                puts
+              puts
+              puts "*"*80
+              puts "Details page number: #{ inner_index }"
+              puts "*"*80
+              puts
 
-                if !inner_next_link
-                  inner_continue = false
-                  details_browser.close
-                elsif inner_next_link.attr("disabled").blank?
-                  details_browser.link(id: "ctl00_ContentPlaceHolder1_Listnavigation_btnPageNext").click
-                  details_doc = Nokogiri::HTML(details_browser.html)
-                  inner_index += 1
-                elsif inner_next_link.attr("disabled").present?
-                  inner_continue = false
-                  details_browser.close
-                end 
+              if !inner_next_link
+                inner_continue = false
+                details_browser.close
+              elsif inner_next_link.attr("disabled").blank?
+                details_browser.link(id: "ctl00_ContentPlaceHolder1_Listnavigation_btnPageNext").click
+                details_doc = Nokogiri::HTML(details_browser.html)
+                inner_index += 1
+              elsif inner_next_link.attr("disabled").present?
+                inner_continue = false
+                details_browser.close
+              end
 
-              end # inner_continue
-            end # if report type
-              
-              # "#ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext"
+            end # inner_continue
+          end # if report type
 
-          end # donors_table.each
-        end
-          # find next link
-          next_link = doc.css("a")&.map{ |a| a if a.text == "Next" }.compact.first
+          # "#ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext"
 
-          # don't click next link if on last page
-          if next_link.attr("disabled").blank?
-            browser.link(id: "ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext").click
-            doc = Nokogiri::HTML(browser.html)
-            index += 1
-          # elsif Time.now - contribution.contributed_at < 2
-          #   continue = false
-          #   browser.close
-          else
-            # exit when there is no next link
-            continue = false
-            browser.close
-          end  
+        end # donors_table.each
+      end
+      # find next link
+      next_link = doc.css("a")&.map{ |a| a if a.text == "Next" }.compact.first
+
+      # don't click next link if on last page
+      if next_link.attr("disabled").blank?
+        browser.link(id: "ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext").click
+        doc = Nokogiri::HTML(browser.html)
+        index += 1
+        # elsif Time.now - contribution.contributed_at < 2
+        #   continue = false
+        #   browser.close
+      else
+        # exit when there is no next link
+        continue = false
+        browser.close
+      end
     end # while
-      
+
     puts
     puts
   end # task
