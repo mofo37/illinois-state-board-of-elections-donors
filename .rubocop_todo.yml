@@ -3,10 +3,6 @@ Lint/AssignmentInCondition:
   Exclude:
     - 'lib/tasks/scraper.rake'
 
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
-
 # Configuration parameters: CountBlocks.
 Metrics/BlockNesting:
   Max: 6
