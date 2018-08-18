@@ -8,8 +8,7 @@ class SpreadsheetsController < ApplicationController
   end
 
   # GET /spreadsheets/1
-  def show
-  end
+  def show; end
 
   # GET /spreadsheets/new
   def new
@@ -17,8 +16,7 @@ class SpreadsheetsController < ApplicationController
   end
 
   # GET /spreadsheets/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /spreadsheets
   def create
@@ -47,6 +45,7 @@ class SpreadsheetsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_spreadsheet
       @spreadsheet = Spreadsheet.find(params[:id])
