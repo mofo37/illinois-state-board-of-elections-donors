@@ -10,7 +10,3 @@ Lint/ShadowingOuterLocalVariable:
 # Configuration parameters: CountBlocks.
 Metrics/BlockNesting:
   Max: 6
-
-Style/DateTime:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
