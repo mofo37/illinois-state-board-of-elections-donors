@@ -177,8 +177,8 @@ namespace :contributions do
     Spreadsheet.create url: download_url
 
     puts 'Marking A1s and B1s as delivered'
-    a1s.update_all(delivered_at: Time.now)
-    b1s.update_all(delivered_at: Time.now)
+    a1s.update_all(delivered_at: Time.current)
+    b1s.update_all(delivered_at: Time.current)
 
     puts 'FINISHED'
     puts download_url

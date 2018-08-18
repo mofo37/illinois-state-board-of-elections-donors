@@ -199,7 +199,7 @@ namespace :contributions do
         browser.link(id: 'ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext').click
         doc = Nokogiri::HTML(browser.html)
         index += 1
-        # elsif Time.now - contribution.contributed_at < 2
+        # elsif Time.current - contribution.contributed_at < 2
         #   continue = false
         #   browser.close
       else

@@ -35,7 +35,7 @@ Contribution.all.each do |c|
     c.contributed_at.day == day
     c.update delivered_at: nil
   else 
-    c.update delivered_at: Time.now
+    c.update delivered_at: Time.current
   end
 end
 
