@@ -65,7 +65,7 @@ namespace :contributions do
     continue = true
     index = 1
 
-    while continue do
+    while continue
       donors_table = doc.css("table#ctl00_ContentPlaceHolder1_tblLatestReportsFiled tr")
 
       donors_table[1..-1].each do |row|
@@ -115,7 +115,7 @@ namespace :contributions do
             inner_continue = true
             inner_index = 1
 
-            while inner_continue do
+            while inner_continue
               details_table = details_doc.css("table").last
 
               unless details_table.blank?
