@@ -72,10 +72,3 @@ Style/MultipleComparison:
 Style/Next:
   Exclude:
     - 'lib/tasks/scraper.rake'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'lib/tasks/scraper.rake'

@@ -9,7 +9,7 @@ def new_browser
   options = Selenium::WebDriver::Chrome::Options.new
 
   # make a directory for chrome if it doesn't already exist
-  chrome_dir = File.join Dir.pwd, %w(tmp chrome)
+  chrome_dir = File.join Dir.pwd, %w[tmp chrome]
   FileUtils.mkdir_p chrome_dir
   user_data_dir = "--user-data-dir=#{chrome_dir}"
   # add the option for user-data-dir
