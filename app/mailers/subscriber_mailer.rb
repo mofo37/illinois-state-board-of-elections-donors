@@ -1,7 +1,7 @@
 class SubscriberMailer < ApplicationMailer
   default from: ENV['DEFAULT_FROM_EMAIL']
 
-  def daily_email(email)
+  def daily_email email
     date = Time.current.strftime('%m-%d-%Y')
     spreadsheet_file = "Report for #{date}.xlsx"
     spreadsheet_file_path = "tmp/#{spreadsheet_file.tr(' ', "\ ")}"
