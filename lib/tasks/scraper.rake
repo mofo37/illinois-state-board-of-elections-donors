@@ -139,14 +139,14 @@ namespace :contributions do
               # save data
               form = "#{type}-1"
 
-              contribution = Contribution.find_or_create_by({
-                                                              form:           form,
-                                                              contributed_by: contributed_by,
-                                                              amount:         amount,
-                                                              received_by:    received_by,
-                                                              contributed_at: filed_at,
-                                                              uid:            uid
-                                                            })
+              contribution = Contribution.find_or_create_by(
+                form:           form,
+                contributed_by: contributed_by,
+                amount:         amount,
+                received_by:    received_by,
+                contributed_at: filed_at,
+                uid:            uid
+              )
 
               if type == 'B'
                 contribution.payor          = payor

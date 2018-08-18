@@ -42,13 +42,6 @@ Rails/Present:
   Exclude:
     - 'lib/tasks/scraper.rake'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
 
 # Offense count: 6
 Style/CommentedKeyword:
