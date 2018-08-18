@@ -11,6 +11,7 @@ gem 'nokogiri'
 gem 'rubyXL'
 gem 'watir'
 gem 'aws-sdk'
+gem 'chromedriver-helper'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
