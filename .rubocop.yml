@@ -90,3 +90,8 @@ Rails/OutputSafety:
 # confused as Kernel#open by Rubocop
 Security/Open:
   Enabled: false
+
+# Allow: end # if foo?
+Style/CommentedKeyword:
+  Exclude:
+    - 'lib/tasks/scraper.rake'

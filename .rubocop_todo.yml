@@ -3,12 +3,6 @@ Lint/AssignmentInCondition:
   Exclude:
     - 'lib/tasks/scraper.rake'
 
-# # Configuration parameters: Whitelist.
-# # Whitelist: present?, blank?, presence, try, try!
-# Lint/SafeNavigationChain:
-#   Exclude:
-#     - 'lib/tasks/scraper.rake'
-
 Lint/ShadowingOuterLocalVariable:
   Exclude:
     - 'lib/tasks/scraper.rake'
@@ -16,10 +10,6 @@ Lint/ShadowingOuterLocalVariable:
 # Configuration parameters: CountBlocks.
 Metrics/BlockNesting:
   Max: 6
-
-Style/CommentedKeyword:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
 
 Style/DateTime:
   Exclude:
