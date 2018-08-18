@@ -72,8 +72,8 @@ namespace :contributions do
         report_type_td = row.css('td')[1]
         report_type    = report_type_td.text.strip
 
-        next unless report_type == 'A-1 ($1000+ Year Round)' ||
-                    report_type == 'B-1 ($1000+ Year Round)'
+        next unless ['A-1 ($1000+ Year Round)', 'B-1 ($1000+ Year Round)'].include? report_type
+
         type = report_type[0] == 'A' ? 'A' : 'B'
 
         payor = row.css('td')[0].text

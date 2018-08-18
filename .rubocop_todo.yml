@@ -59,8 +59,3 @@ Style/CommentedKeyword:
 Style/DateTime:
   Exclude:
     - 'lib/tasks/scraper.rake'
-
-# Offense count: 1
-Style/MultipleComparison:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
