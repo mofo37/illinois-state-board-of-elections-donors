@@ -35,14 +35,6 @@ Performance/StringReplacement:
   Exclude:
     - 'lib/tasks/scraper.rake'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: NotNilAndNotEmpty, NotBlank, UnlessBlank.
-Rails/Present:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
-
-
 # Offense count: 6
 Style/CommentedKeyword:
   Exclude:
