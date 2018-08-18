@@ -184,12 +184,8 @@ namespace :contributions do
           end
 
         end # inner_continue
-        # if report type
-
-        # "#ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext"
-
-        # donors_table.each
       end
+
       # find next link
       pagination_links = doc.css('a')&.map { |a| a if a.text == 'Next' }
       next_link        = pagination_links.compact.first
