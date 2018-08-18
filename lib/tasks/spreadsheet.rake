@@ -181,6 +181,8 @@ namespace :contributions do
     b1s.update_all(delivered_at: Time.current)
 
     puts 'FINISHED'
+    puts
     puts download_url
+    puts
   end
 end

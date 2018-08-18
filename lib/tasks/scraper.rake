@@ -159,6 +159,15 @@ namespace :contributions do
               contribution.save
               puts contribution.inspect
               puts
+
+              # only scrape recent few days
+              if contribution.contributed_at < 3.days.ago
+                puts 'SUCCESS! Scraped all of the recent contributions.'
+                continue       = false
+                inner_continue = false
+                break
+                # ends inner loop
+              end
             end
           end
 
@@ -184,6 +193,9 @@ namespace :contributions do
           end
 
         end # inner_continue
+
+        # ends the scraping
+        break unless continue
       end
 
       # find next link
