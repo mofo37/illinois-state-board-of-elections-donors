@@ -79,11 +79,3 @@ Style/Next:
 Style/PercentLiteralDelimiters:
   Exclude:
     - 'lib/tasks/scraper.rake'
-
-# Offense count: 56
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, ConsistentQuotesInMultiline.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
