@@ -95,17 +95,3 @@ Style/StringLiterals:
 Style/SymbolProc:
   Exclude:
     - 'lib/tasks/scraper.rake'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInHashLiteral:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
-
-# # Offense count: 2
-# # Cop supports --auto-correct.
-# Style/WhileUntilDo:
-#   Exclude:
-#     - 'lib/tasks/scraper.rake'

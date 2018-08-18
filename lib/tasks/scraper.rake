@@ -145,7 +145,7 @@ namespace :contributions do
                                                                   amount:         amount,
                                                                   received_by:    received_by,
                                                                   contributed_at: filed_at,
-                                                                  uid:            uid,
+                                                                  uid:            uid
                                                                 })
 
                   if type == "B"
