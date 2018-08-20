@@ -2,7 +2,8 @@ namespace :contributions do
   desc 'Setup contributions in db for spreadsheet'
   task setup: :environment do
     # if Date.yesterday does not work because of timezones:
-    # date = Time.zone.today.advance(:days => -1)
+    # date = Time.zone.today.advance(:days => -2)
+
     date = Time.zone.today
     contributions = Contribution.all
 
