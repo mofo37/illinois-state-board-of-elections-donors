@@ -81,7 +81,9 @@ namespace :contributions do
 
         # find the date and time
         filed_at = row.css('td')[3].inner_html.split('<br>').first.sub('<span>', '')
-        filed_at = Time.strptime(filed_at, '%m/%d/%Y %I:%M:%S %p')
+
+        Time.zone = "UTC"
+        filed_at = Time.zone.strptime(filed_at, '%m/%d/%Y %I:%M:%S %p')
 
         # find the url
         cats = report_type_td.css('a')
