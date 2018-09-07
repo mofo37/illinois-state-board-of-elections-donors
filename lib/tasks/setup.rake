@@ -4,7 +4,7 @@ namespace :contributions do
     date = Time.zone.today
 
     # if Date.yesterday does not work because of timezones:
-    date = Time.zone.today.advance(:days => -1)
+    # date = Time.zone.today.advance(days: -1)
 
     contributions = Contribution.all
 
