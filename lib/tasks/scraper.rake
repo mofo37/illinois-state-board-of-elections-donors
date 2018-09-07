@@ -183,8 +183,6 @@ namespace :contributions do
               puts contribution.inspect
               puts
 
-              exit
-
               # only scrape recent few days
               if contribution.contributed_at < 3.days.ago
                 puts 'SUCCESS! Scraped all of the recent contributions.'
