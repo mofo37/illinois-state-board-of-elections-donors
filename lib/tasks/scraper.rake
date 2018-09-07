@@ -82,6 +82,22 @@ namespace :contributions do
         # find the date and time
         filed_at = row.css('td')[3].inner_html.split('<br>').first.sub('<span>', '')
 
+        # extract date/time pieces from filed_at
+        month, day, year_plus_time = filed_at.split '/'
+        year, time, ampm           = year_plus_time.split
+        hour, minute, second       = time.split ':'
+
+        hour = (hour.to_i + 12).to_s if ampm.downcase == 'pm'
+
+        year   = year.rjust   2, '0'
+        month  = month.rjust  2, '0'
+        day    = day.rjust    2, '0'
+        hour   = hour.rjust   2, '0'
+        minute = minute.rjust 2, '0'
+        second = second.rjust 2, '0'
+        ampm   = ampm
+
+        # TODO: delete this after confirming date/time pieces work
         Time.zone = "UTC"
         filed_at = Time.zone.strptime(filed_at, '%m/%d/%Y %I:%M:%S %p')
 
@@ -147,7 +163,13 @@ namespace :contributions do
                 amount:         amount,
                 received_by:    received_by,
                 contributed_at: filed_at,
-                uid:            uid
+                uid:            uid,
+                year:           year,
+                month:          month,
+                day:            day,
+                hour:           hour,
+                minute:         minute,
+                second:         second
               )
 
               if type == 'B'
@@ -160,6 +182,8 @@ namespace :contributions do
               contribution.save
               puts contribution.inspect
               puts
+
+              exit
 
               # only scrape recent few days
               if contribution.contributed_at < 3.days.ago
