@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180216054123) do
+ActiveRecord::Schema.define(version: 20180907183334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,11 +24,12 @@ ActiveRecord::Schema.define(version: 20180216054123) do
     t.datetime "updated_at", null: false
     t.datetime "contributed_at"
     t.string "uid"
-    t.string "payee"
-    t.string "candidate_name"
-    t.string "purpose"
-    t.string "payor"
-    t.datetime "delivered_at"
+    t.string "year"
+    t.string "month"
+    t.string "day"
+    t.string "hour"
+    t.string "minute"
+    t.string "second"
   end
 
   create_table "spreadsheets", force: :cascade do |t|
