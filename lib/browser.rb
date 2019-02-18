@@ -1,3 +1,5 @@
+require 'watir'
+
 class Browser
   def initialize
     options = Selenium::WebDriver::Chrome::Options.new
