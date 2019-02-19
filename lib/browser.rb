@@ -9,7 +9,8 @@ class Browser
   def initialize
     options = Selenium::WebDriver::Chrome::Options.new
 
-    FileUtils.mkdir_p chrome_dir
+    create_directories_if_needed
+
     # add the option for user-data-dir
     options.add_argument user_data_dir
 
@@ -43,5 +44,9 @@ class Browser
 
   def user_data_dir
     "--user-data-dir=#{chrome_dir}"
+  end
+
+  def create_directories_if_needed
+    FileUtils.mkdir_p chrome_dir
   end
 end
