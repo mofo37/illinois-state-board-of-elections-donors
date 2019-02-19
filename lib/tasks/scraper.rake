@@ -1,5 +1,4 @@
 require 'open-uri'
-require 'watir'
 require_relative '../browser'
 
 def strip_line_breaks str
