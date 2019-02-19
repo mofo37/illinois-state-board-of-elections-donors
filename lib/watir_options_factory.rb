@@ -2,16 +2,14 @@ class WatirOptionsFactory
   attr_reader :options
 
   def initialize
-    create_directories_if_needed
-
+    create_directories
     @options = Selenium::WebDriver::Chrome::Options.new
-
     add_arguments_to_options
   end
 
   private
 
-  def create_directories_if_needed
+  def create_directories
     FileUtils.mkdir_p chrome_dir
   end
 
@@ -36,19 +34,15 @@ class WatirOptionsFactory
   end
 
   def add_arguments_to_options
-    # add the option for user-data-dir
-    @options.add_argument user_data_dir
+    args = [user_data_dir, 'window-size=1200x600', 'headless', 'disable-gpu']
 
-    # headless!
-    # keyboard entry wont work until chromedriver 2.31 is released
-    @options.add_argument 'window-size=1200x600'
-    @options.add_argument 'headless'
-    @options.add_argument 'disable-gpu'
+    args.each do |argument|
+      @options.add_argument argument
+    end
 
     # TODO: this isn't used or working yet 2019-02-18
     # setup_heroku
   end
-
 
   def on_heroku?
     chrome_bin.present?
