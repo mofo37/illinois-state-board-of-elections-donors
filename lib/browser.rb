@@ -1,6 +1,11 @@
+require 'forwardable'
 require 'watir'
 
 class Browser
+  extend Forwardable
+
+  def_delegators :@watir, :goto, :html, :close, :link
+
   def initialize
     options = Selenium::WebDriver::Chrome::Options.new
 
@@ -30,21 +35,5 @@ class Browser
 
     # make the browser
     @watir = Watir::Browser.new :chrome, options: options
-  end
-
-  def goto url
-    @watir.goto url
-  end
-
-  def html
-    @watir.html
-  end
-
-  def close
-    @watir.close
-  end
-
-  def link options
-    @watir.link options
   end
 end
