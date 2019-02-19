@@ -1,7 +1,3 @@
-require 'forwardable'
-require 'watir'
-require_relative 'watir_options_factory'
-
 class Browser
   extend Forwardable
 

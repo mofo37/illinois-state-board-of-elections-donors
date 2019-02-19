@@ -1,6 +1,3 @@
-require 'open-uri'
-require_relative '../browser'
-
 def strip_line_breaks str
   str.delete("\r").delete("\n")
 end

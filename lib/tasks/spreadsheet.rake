@@ -1,6 +1,3 @@
-require 'rubyXL'
-require 'aws-sdk'
-
 namespace :contributions do
   desc "Create spreadsheet of today's contributions"
   task spreadsheet: :environment do
