@@ -14,14 +14,14 @@ class Browser
     # add the option for user-data-dir
     options.add_argument user_data_dir
 
-    # TODO: this isn't used or working yet 2019-02-18
-    setup_heroku
-
     # headless!
     # keyboard entry wont work until chromedriver 2.31 is released
     options.add_argument 'window-size=1200x600'
     options.add_argument 'headless'
     options.add_argument 'disable-gpu'
+
+    # TODO: this isn't used or working yet 2019-02-18
+    setup_heroku
 
     # make the browser
     @watir = Watir::Browser.new :chrome, options: options
