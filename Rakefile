@@ -3,9 +3,9 @@
 
 require_relative 'config/application'
 
+require 'aws-sdk'
 require 'open-uri'
 require 'rubyXL'
-require 'aws-sdk'
 require 'watir'
 
 require_relative 'lib/browser'
