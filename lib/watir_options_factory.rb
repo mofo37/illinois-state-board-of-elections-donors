@@ -6,17 +6,7 @@ class WatirOptionsFactory
 
     @options = Selenium::WebDriver::Chrome::Options.new
 
-    # add the option for user-data-dir
-    @options.add_argument user_data_dir
-
-    # headless!
-    # keyboard entry wont work until chromedriver 2.31 is released
-    @options.add_argument 'window-size=1200x600'
-    @options.add_argument 'headless'
-    @options.add_argument 'disable-gpu'
-
-    # TODO: this isn't used or working yet 2019-02-18
-    # setup_heroku
+    add_arguments_to_options
   end
 
   private
@@ -44,6 +34,21 @@ class WatirOptionsFactory
   def chrome_bin
     ENV['GOOGLE_CHROME_BIN']
   end
+
+  def add_arguments_to_options
+    # add the option for user-data-dir
+    @options.add_argument user_data_dir
+
+    # headless!
+    # keyboard entry wont work until chromedriver 2.31 is released
+    @options.add_argument 'window-size=1200x600'
+    @options.add_argument 'headless'
+    @options.add_argument 'disable-gpu'
+
+    # TODO: this isn't used or working yet 2019-02-18
+    # setup_heroku
+  end
+
 
   def on_heroku?
     chrome_bin.present?
