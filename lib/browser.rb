@@ -9,8 +9,6 @@ class Browser
   def initialize
     options = Selenium::WebDriver::Chrome::Options.new
 
-    # make a directory for chrome if it doesn't already exist
-    chrome_dir = File.join Dir.pwd, %w[tmp chrome]
     FileUtils.mkdir_p chrome_dir
     user_data_dir = "--user-data-dir=#{chrome_dir}"
     # add the option for user-data-dir
@@ -35,5 +33,12 @@ class Browser
 
     # make the browser
     @watir = Watir::Browser.new :chrome, options: options
+  end
+
+  private
+
+  def chrome_dir
+    # make a directory for chrome if it doesn't already exist
+    File.join Dir.pwd, %w[tmp chrome]
   end
 end
