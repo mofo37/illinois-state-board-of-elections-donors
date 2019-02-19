@@ -29,6 +29,22 @@ class Browser
     options.add_argument 'disable-gpu'
 
     # make the browser
-    Watir::Browser.new :chrome, options: options
+    @watir = Watir::Browser.new :chrome, options: options
+  end
+
+  def goto url
+    @watir.goto url
+  end
+
+  def html
+    @watir.html
+  end
+
+  def close
+    @watir.close
+  end
+
+  def link options
+    @watir.link options
   end
 end
