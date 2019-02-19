@@ -7,9 +7,9 @@ class Browser
   def_delegators :@watir, :goto, :html, :close, :link
 
   def initialize
-    options = Selenium::WebDriver::Chrome::Options.new
-
     create_directories_if_needed
+
+    options = Selenium::WebDriver::Chrome::Options.new
 
     # add the option for user-data-dir
     options.add_argument user_data_dir
