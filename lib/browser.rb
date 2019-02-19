@@ -8,22 +8,6 @@ class Browser
 
   def initialize
     create_directories_if_needed
-
-    options = Selenium::WebDriver::Chrome::Options.new
-
-    # add the option for user-data-dir
-    options.add_argument user_data_dir
-
-    # headless!
-    # keyboard entry wont work until chromedriver 2.31 is released
-    options.add_argument 'window-size=1200x600'
-    options.add_argument 'headless'
-    options.add_argument 'disable-gpu'
-
-    # TODO: this isn't used or working yet 2019-02-18
-    setup_heroku
-
-    # make the browser
     @watir = Watir::Browser.new :chrome, options: options
   end
 
@@ -40,6 +24,24 @@ class Browser
 
   def create_directories_if_needed
     FileUtils.mkdir_p chrome_dir
+  end
+
+  def options
+    selenium_options = Selenium::WebDriver::Chrome::Options.new
+
+    # add the option for user-data-dir
+    selenium_options.add_argument user_data_dir
+
+    # headless!
+    # keyboard entry wont work until chromedriver 2.31 is released
+    selenium_options.add_argument 'window-size=1200x600'
+    selenium_options.add_argument 'headless'
+    selenium_options.add_argument 'disable-gpu'
+
+    # TODO: this isn't used or working yet 2019-02-18
+    # setup_heroku
+
+    selenium_options
   end
 
   def chrome_bin
