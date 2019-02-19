@@ -3,4 +3,12 @@
 
 require_relative 'config/application'
 
+require 'aws-sdk'
+require 'open-uri'
+require 'rubyXL'
+require 'watir'
+
+require_relative 'lib/browser'
+require_relative 'lib/watir_options_factory'
+
 Rails.application.load_tasks
