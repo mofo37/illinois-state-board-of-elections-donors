@@ -2,6 +2,8 @@ class WatirOptionsFactory
   attr_reader :options
 
   def initialize
+    create_directories_if_needed
+
     @options = Selenium::WebDriver::Chrome::Options.new
 
     # add the option for user-data-dir
@@ -18,6 +20,16 @@ class WatirOptionsFactory
   end
 
   private
+
+  def create_directories_if_needed
+    FileUtils.mkdir_p chrome_dir
+  end
+
+  # TODO: DRY this up from WatirOptionsFactory#chrome_dir
+  def chrome_dir
+    # make a directory for chrome if it doesn't already exist
+    File.join Dir.pwd, %w[tmp chrome]
+  end
 
   # TODO: DRY this up from Browser#chrome_dir
   def chrome_dir
