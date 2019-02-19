@@ -42,8 +42,12 @@ class Browser
     FileUtils.mkdir_p chrome_dir
   end
 
+  def chrome_bin
+    ENV['GOOGLE_CHROME_BIN']
+  end
+
   def on_heroku?
-    ENV['GOOGLE_CHROME_BIN'].present?
+    chrome_bin.present?
   end
 
   def setup_heroku
@@ -52,7 +56,6 @@ class Browser
       # let Selenium know where to look for chrome if we have a hint from
       # heroku. chromedriver-helper & chrome seem to work out of the box on macOS,
       # but not on heroku.
-      chrome_bin = ENV['GOOGLE_CHROME_BIN']
       options.add_argument 'no-sandbox'
       options.binary = chrome_bin
       # give a hint to here too
