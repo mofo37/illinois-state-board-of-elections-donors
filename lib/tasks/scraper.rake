@@ -108,11 +108,14 @@ namespace :contributions do
         inner_index = 1
 
         while inner_continue
-          details_table = details_doc.css('table').last
+          details_table = details_doc.css('table#ContentPlaceHolder1_gvA1List')
 
           if details_table.present?
             # walk through rows
-            details_table.css('tr')[1..-1].each do |inner_row|
+            details_table.css('> tbody > tr')[1..-1].each do |inner_row|
+              # skip pagination row
+              next if inner_row.attr('class') =~ /GridViewPagerTemplate/
+
               # grab data
               payee           = inner_row.css('td')[0].text
               candidate_name  = inner_row.css('td')[5].text
