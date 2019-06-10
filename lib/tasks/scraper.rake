@@ -1,5 +1,7 @@
 require "digest/sha1"
 
+NEXT_LINK_ID = 'ContentPlaceHolder1_gvReportsFiled_phPagerTemplate_gvReportsFiled_PageNext'.freeze
+
 def strip_line_breaks str
   str.delete("\r").delete("\n")
 end
@@ -178,7 +180,7 @@ namespace :contributions do
             inner_continue = false
             details_browser.close
           elsif inner_next_link.attr('disabled').blank?
-            details_browser.link(id: 'ctl00_ContentPlaceHolder1_Listnavigation_btnPageNext').click
+            details_browser.link(id: NEXT_LINK_ID).click
             details_doc = Nokogiri::HTML(details_browser.html)
             inner_index += 1
           elsif inner_next_link.attr('disabled').present?
@@ -197,8 +199,8 @@ namespace :contributions do
       next_link        = pagination_links.compact.first
 
       # don't click next link if on last page
-      if next_link.attr('disabled').blank?
-        browser.link(id: 'ctl00_ContentPlaceHolder1_ListNavigation_btnPageNext').click
+      if next_link.present?
+        browser.link(id: NEXT_LINK_ID).click
         doc = Nokogiri::HTML(browser.html)
         index += 1
         # elsif Time.current - contribution.contributed_at < 2
