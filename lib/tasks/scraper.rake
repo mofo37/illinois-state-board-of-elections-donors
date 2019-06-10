@@ -33,7 +33,7 @@ namespace :contributions do
     index = 1
 
     while continue
-      donors_table = doc.css('table#ctl00_ContentPlaceHolder1_tblLatestReportsFiled tr')
+      donors_table = doc.css('table#ContentPlaceHolder1_gvReportsFiled tr')
 
       donors_table[1..-1].each do |row|
         report_type_td = row.css('td')[1]
@@ -102,7 +102,7 @@ namespace :contributions do
 
         while inner_continue
           details_table = details_doc.css('table').last
-
+          
           if details_table.present?
             # walk through rows
             details_table.css('tr')[1..-1].each do |inner_row|
