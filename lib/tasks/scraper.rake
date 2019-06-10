@@ -39,7 +39,9 @@ namespace :contributions do
 
       donors_table[1..-1].each do |row|
         report_type_td = row.css('td')[1]
-        report_type    = report_type_td.text.strip
+        next if report_type_td.nil?
+
+        report_type = report_type_td.text.strip
 
         next unless ['A-1 ($1000+ Year Round)', 'B-1 ($1000+ Year Round)'].include? report_type
 
