@@ -1,6 +1,7 @@
 require "digest/sha1"
 
-NEXT_LINK_ID = 'ContentPlaceHolder1_gvReportsFiled_phPagerTemplate_gvReportsFiled_PageNext'.freeze
+OUTER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvReportsFiled_phPagerTemplate_gvReportsFiled_PageNext'.freeze
+INNER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvA1List_phPagerTemplate_gvA1List_PageNext'.freeze
 
 def strip_line_breaks str
   str.delete("\r").delete("\n")
@@ -79,7 +80,7 @@ namespace :contributions do
         details_path = report_type_td.css('a').attr('href')
 
         details_url  = base_url + details_path
-        puts details_url.inspect
+        puts details_url
 
         # fetch the url
         details_browser = Browser.new
@@ -157,7 +158,7 @@ namespace :contributions do
               puts
 
               # only scrape recent few days
-              if contribution.contributed_at < 3.days.ago
+              if contribution.contributed_at < 10.days.ago
                 puts 'SUCCESS! Scraped all of the recent contributions.'
                 continue       = false
                 inner_continue = false
@@ -180,7 +181,7 @@ namespace :contributions do
             inner_continue = false
             details_browser.close
           elsif inner_next_link.attr('disabled').blank?
-            details_browser.link(id: NEXT_LINK_ID).click
+            details_browser.link(id: INNER_NEXT_LINK_ID).click
             details_doc = Nokogiri::HTML(details_browser.html)
             inner_index += 1
           elsif inner_next_link.attr('disabled').present?
@@ -200,7 +201,7 @@ namespace :contributions do
 
       # don't click next link if on last page
       if next_link.present?
-        browser.link(id: NEXT_LINK_ID).click
+        browser.link(id: OUTER_NEXT_LINK_ID).click
         doc = Nokogiri::HTML(browser.html)
         index += 1
         # elsif Time.current - contribution.contributed_at < 2
