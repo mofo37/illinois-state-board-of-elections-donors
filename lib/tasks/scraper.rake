@@ -1,3 +1,5 @@
+require "digest/sha1"
+
 def strip_line_breaks str
   str.delete("\r").delete("\n")
 end
@@ -117,7 +119,8 @@ namespace :contributions do
               amount_and_date = inner_row.css('td')[2].inner_html.strip
               amount          = amount_and_date.split('<br>').map(&:strip).first
               amount          = amount.sub('<span>', '')
-              uid             = inner_row.css('th').first.attr('id')
+              row_text        = inner_row.css('td').text
+              uid             = Digest::SHA1.hexdigest(row_text)
               received_by     = strip_line_breaks(inner_row.css('td')[3].css('a').text.strip)
 
               # save data
