@@ -102,7 +102,7 @@ namespace :contributions do
 
         while inner_continue
           details_table = details_doc.css('table').last
-          
+
           if details_table.present?
             # walk through rows
             details_table.css('tr')[1..-1].each do |inner_row|
