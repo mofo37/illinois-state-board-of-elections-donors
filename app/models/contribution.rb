@@ -1,4 +1,6 @@
 class Contribution < ApplicationRecord
+  validates :uid, uniqueness: true
+
   scope :on, lambda { |date|
                where(
                  'contributed_at BETWEEN ? AND ?',

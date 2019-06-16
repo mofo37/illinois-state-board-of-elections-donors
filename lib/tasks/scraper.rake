@@ -112,7 +112,7 @@ namespace :contributions do
 
           if details_table.present?
             # walk through rows
-            details_table.css('> tbody > tr')[1..-1].each do |inner_row|
+            details_table.css('> tbody > tr')[1..-1].each_with_index do |inner_row, index|
               # skip pagination row
               next if inner_row.attr('class') =~ /GridViewPagerTemplate/
 
@@ -128,7 +128,7 @@ namespace :contributions do
               amount          = amount_and_date.split('<br>').map(&:strip).first
               amount          = amount.sub('<span>', '')
               row_text        = inner_row.css('td').text
-              uid             = Digest::SHA1.hexdigest(row_text)
+              uid             = Digest::SHA1.hexdigest(row_text + index.to_s)
               received_by     = strip_line_breaks(inner_row.css('td')[3].css('a').text.strip)
 
               # save data
@@ -161,7 +161,7 @@ namespace :contributions do
               puts
 
               # only scrape recent few days
-              if contribution.contributed_at < 10.days.ago
+              if contribution.contributed_at < 3.days.ago
                 puts 'SUCCESS! Scraped all of the recent contributions.'
                 continue       = false
                 inner_continue = false
