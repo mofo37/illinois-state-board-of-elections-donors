@@ -1,4 +1,4 @@
-require "digest/sha1"
+require 'digest/sha1'
 
 OUTER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvReportsFiled_phPagerTemplate_gvReportsFiled_PageNext'.freeze
 INNER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvA1List_phPagerTemplate_gvA1List_PageNext'.freeze
@@ -70,7 +70,7 @@ namespace :contributions do
         second = second.rjust 2, '0'
 
         # TODO: delete this after confirming date/time pieces work
-        Time.zone = "UTC"
+        Time.zone = 'UTC'
         filed_at = Time.zone.strptime(filed_at, '%m/%d/%Y %I:%M:%S %p')
 
         # find the url

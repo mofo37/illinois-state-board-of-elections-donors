@@ -37,7 +37,7 @@ namespace :contributions do
 
     contributions = Contribution.where(year: year, month: month, day: day)
 
-    puts "Updating Contribution.delivered_at to now for: all "
+    puts 'Updating Contribution.delivered_at to now for: all '
     Contribution.update_all delivered_at: Time.current
 
     puts "Updating Contribution.delivered_at to nil for: #{year}-#{month}-#{day}"

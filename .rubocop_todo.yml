@@ -24,17 +24,6 @@ Style/GuardClause:
   Exclude:
     - 'lib/watir_options_factory.rb'
 
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, ConsistentQuotesInMultiline.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Exclude:
-    - 'config/environments/production.rb'
-    - 'config/puma.rb'
-    - 'lib/tasks/scraper.rake'
-    - 'lib/tasks/setup.rake'
-
 # Offense count: 58
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect, AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
