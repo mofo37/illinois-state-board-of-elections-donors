@@ -161,13 +161,12 @@ namespace :contributions do
               puts
 
               # only scrape recent few days
-              if contribution.contributed_at < 3.days.ago
-                puts 'SUCCESS! Scraped all of the recent contributions.'
-                continue       = false
-                inner_continue = false
-                break
-                # ends inner loop
-              end
+              next unless contribution.contributed_at < 3.days.ago
+
+              puts 'SUCCESS! Scraped all of the recent contributions.'
+              continue       = false
+              inner_continue = false
+              break
             end
           end
 
