@@ -93,7 +93,7 @@ namespace :contributions do
 
     # Sets row widths
     {
-      0 =>  8,
+      0 => 8,
       1 => 90,
       2 => 15,
       3 => 60
@@ -130,7 +130,7 @@ namespace :contributions do
 
     puts 'Configuring AWS'
     Aws.config.update(
-      region: 'us-east-1',
+      region:      'us-east-1',
       credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
     )
 
@@ -146,7 +146,7 @@ namespace :contributions do
     # Sets a bucket to public-read
     puts 'Setting S3 bucket to public'
     client.put_bucket_acl(
-      acl: 'public-read',
+      acl:    'public-read',
       bucket: bucket_name
     )
 
@@ -162,9 +162,9 @@ namespace :contributions do
     # Setting the object to public-read
     puts 'Writing file to S3'
     client.put_object_acl(
-      acl: 'public-read',
+      acl:    'public-read',
       bucket: bucket_name,
-      key: file_name
+      key:    file_name
     )
 
     download_url = [bucket_url, file_name].join('/')
