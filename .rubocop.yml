@@ -1,8 +1,6 @@
 require: rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.5
-
   Exclude:
     - 'db/**/*'
     - 'script/*'
@@ -23,7 +21,10 @@ Naming/FileName:
     - 'Guardfile'
     - 'Rakefile'
 
-Rails:
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
   Enabled: true
 
 Metrics/CyclomaticComplexity:
@@ -37,9 +38,6 @@ Metrics/ClassLength:
 
 Metrics/ParameterLists:
   Max: 6
-
-Metrics/LineLength:
-  Max: 200
 
 Metrics/MethodLength:
   Max: 40
@@ -74,6 +72,13 @@ Style/NestedParenthesizedCalls:
 Layout/IndentationWidth:
   Enabled: false
 
+Layout/LineLength:
+  Max: 200
+
+# Configuration parameters: CountBlocks.
+Metrics/BlockNesting:
+  Max: 6
+
 # README: the `begin` in BadRequestRescue seems to be required
 Style/RedundantBegin:
   Enabled: false
@@ -91,6 +96,11 @@ Style/CommentedKeyword:
   Exclude:
     - 'lib/tasks/scraper.rake'
 
-# Configuration parameters: CountBlocks.
-Metrics/BlockNesting:
-  Max: 6
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
