@@ -27,6 +27,9 @@ Layout/IndentationConsistency:
 Layout/IndentationWidth:
   Enabled: false
 
+Layout/LineLength:
+  Max: 112
+
 Metrics/BlockLength:
   Max: 153
 
