@@ -112,7 +112,7 @@ namespace :contributions do
 
           if details_table.present?
             # walk through rows
-            details_table.css('> tbody > tr')[1..-1].each_with_index do |inner_row, index|
+            details_table.css('> tbody > tr')[1..-1].each_with_index do |inner_row, inner_row_index|
               # skip pagination row
               next if inner_row.attr('class') =~ /GridViewPagerTemplate/
 
@@ -128,7 +128,7 @@ namespace :contributions do
               amount          = amount_and_date.split('<br>').map(&:strip).first
               amount          = amount.sub('<span>', '')
               row_text        = inner_row.css('td').text
-              uid             = Digest::SHA1.hexdigest(row_text + index.to_s)
+              uid             = Digest::SHA1.hexdigest(row_text + inner_row_index.to_s)
               received_by     = strip_line_breaks(inner_row.css('td')[3].css('a').text.strip)
 
               # save data
