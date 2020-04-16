@@ -68,7 +68,6 @@ namespace :contributions do
         hour   = hour.rjust   2, '0'
         minute = minute.rjust 2, '0'
         second = second.rjust 2, '0'
-        ampm   = ampm
 
         # TODO: delete this after confirming date/time pieces work
         Time.zone = "UTC"

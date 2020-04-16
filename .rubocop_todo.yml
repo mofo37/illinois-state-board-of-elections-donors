@@ -19,11 +19,6 @@ Lint/UnusedBlockArgument:
     - 'lib/tasks/setup.rake'
 
 # Offense count: 1
-Lint/UselessAssignment:
-  Exclude:
-    - 'lib/tasks/scraper.rake'
-
-# Offense count: 1
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
   Exclude:
