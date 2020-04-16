@@ -14,11 +14,6 @@ class WatirOptionsFactory
   end
 
   # TODO: DRY this up from WatirOptionsFactory#chrome_dir
-  def chrome_dir
-    # make a directory for chrome if it doesn't already exist
-    File.join Dir.pwd, %w[tmp chrome]
-  end
-
   # TODO: DRY this up from Browser#chrome_dir
   def chrome_dir
     # make a directory for chrome if it doesn't already exist
