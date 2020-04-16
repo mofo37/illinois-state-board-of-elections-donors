@@ -7,14 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: final_newline, final_blank_line
-Layout/TrailingEmptyLines:
-  Exclude:
-    - 'lib/watir_options_factory.rb'
-
-# Offense count: 1
 Lint/DuplicateMethods:
   Exclude:
     - 'lib/watir_options_factory.rb'
