@@ -9,6 +9,7 @@ gem 'watir'
 
 # App server
 gem 'rails', '~> 5.2'
+gem 'bootsnap'
 
 # Database
 gem 'pg', '~> 0.21'

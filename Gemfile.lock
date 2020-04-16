@@ -942,6 +942,8 @@ GEM
     aws-sigv4 (1.1.1)
       aws-eventstream (~> 1.0, >= 1.0.2)
     bindex (0.8.1)
+    bootsnap (1.4.6)
+      msgpack (~> 1.0)
     builder (3.2.4)
     byebug (9.1.0)
     capybara (3.32.1)
@@ -988,6 +990,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.0)
+    msgpack (1.3.3)
     nio4r (2.5.2)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
@@ -1081,6 +1084,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk
+  bootsnap
   byebug
   capybara
   chromedriver-helper
