@@ -77,6 +77,7 @@ namespace :contributions do
         # find the url
         cats = report_type_td.css('a')
         next if cats.blank?
+
         details_path = report_type_td.css('a').attr('href')
 
         details_url  = base_url + details_path

@@ -50,10 +50,6 @@ Style/NestedParenthesizedCalls:
 Layout/IndentationWidth:
   Enabled: false
 
-# Configuration parameters: CountBlocks.
-# Metrics/BlockNesting:
-#   Max: 6
-
 # README: the `begin` in BadRequestRescue seems to be required
 Style/RedundantBegin:
   Enabled: false
