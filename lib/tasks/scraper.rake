@@ -1,4 +1,4 @@
-require "digest/sha1"
+require 'digest/sha1'
 
 OUTER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvReportsFiled_phPagerTemplate_gvReportsFiled_PageNext'.freeze
 INNER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvA1List_phPagerTemplate_gvA1List_PageNext'.freeze
@@ -68,18 +68,18 @@ namespace :contributions do
         hour   = hour.rjust   2, '0'
         minute = minute.rjust 2, '0'
         second = second.rjust 2, '0'
-        ampm   = ampm
 
         # TODO: delete this after confirming date/time pieces work
-        Time.zone = "UTC"
+        Time.zone = 'UTC'
         filed_at = Time.zone.strptime(filed_at, '%m/%d/%Y %I:%M:%S %p')
 
         # find the url
         cats = report_type_td.css('a')
         next if cats.blank?
+
         details_path = report_type_td.css('a').attr('href')
 
-        details_url  = base_url + details_path
+        details_url = base_url + details_path
         puts details_url
 
         # fetch the url
@@ -112,7 +112,7 @@ namespace :contributions do
 
           if details_table.present?
             # walk through rows
-            details_table.css('> tbody > tr')[1..-1].each_with_index do |inner_row, index|
+            details_table.css('> tbody > tr')[1..-1].each_with_index do |inner_row, inner_row_index|
               # skip pagination row
               next if inner_row.attr('class') =~ /GridViewPagerTemplate/
 
@@ -128,7 +128,7 @@ namespace :contributions do
               amount          = amount_and_date.split('<br>').map(&:strip).first
               amount          = amount.sub('<span>', '')
               row_text        = inner_row.css('td').text
-              uid             = Digest::SHA1.hexdigest(row_text + index.to_s)
+              uid             = Digest::SHA1.hexdigest(row_text + inner_row_index.to_s)
               received_by     = strip_line_breaks(inner_row.css('td')[3].css('a').text.strip)
 
               # save data
@@ -161,13 +161,12 @@ namespace :contributions do
               puts
 
               # only scrape recent few days
-              if contribution.contributed_at < 3.days.ago
-                puts 'SUCCESS! Scraped all of the recent contributions.'
-                continue       = false
-                inner_continue = false
-                break
-                # ends inner loop
-              end
+              next unless contribution.contributed_at < 3.days.ago
+
+              puts 'SUCCESS! Scraped all of the recent contributions.'
+              continue       = false
+              inner_continue = false
+              break
             end
           end
 
