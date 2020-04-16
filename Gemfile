@@ -8,8 +8,8 @@ gem 'rubyXL'
 gem 'watir'
 
 # App server
-gem 'rails', '~> 5.2'
 gem 'bootsnap'
+gem 'rails', '~> 5.2'
 
 # Database
 gem 'pg', '~> 0.21'
@@ -26,8 +26,8 @@ group :development, :test do
   gem 'capybara'
   gem 'dotenv-rails'
   gem 'rubocop'
-  gem 'rubocop-rspec'
   gem 'rubocop-performance'
+  gem 'rubocop-rspec'
   gem 'selenium-webdriver'
 end
 
