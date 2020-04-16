@@ -80,7 +80,7 @@ namespace :contributions do
 
         details_path = report_type_td.css('a').attr('href')
 
-        details_url  = base_url + details_path
+        details_url = base_url + details_path
         puts details_url
 
         # fetch the url
