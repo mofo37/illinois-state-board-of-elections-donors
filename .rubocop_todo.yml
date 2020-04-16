@@ -10,10 +10,3 @@
 Lint/ShadowingOuterLocalVariable:
   Exclude:
     - 'lib/tasks/scraper.rake'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
-Lint/UnusedBlockArgument:
-  Exclude:
-    - 'lib/tasks/setup.rake'

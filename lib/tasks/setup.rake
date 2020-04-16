@@ -1,6 +1,6 @@
 namespace :contributions do
   desc 'Setup contributions in db for spreadsheet'
-  task :setup, [:year, :month, :day] => :environment do |t, args|
+  task :setup, [:year, :month, :day] => :environment do |_, args|
     puts
     puts '-' * 80
     puts
