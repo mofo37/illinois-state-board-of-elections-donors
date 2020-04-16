@@ -11,7 +11,7 @@ gem 'watir'
 gem 'rails', '~> 5.1.4'
 
 # Database
-gem 'pg', '~> 0.21'
+gem 'pg'
 
 # Web server
 gem 'puma'
