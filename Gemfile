@@ -1,9 +1,8 @@
 source 'https://rubygems.org'
-ruby '~> 2.7.0'
+ruby '~> 2.6.6'
 
 gem 'aws-sdk'
 gem 'chromedriver-helper'
-gem 'dotenv-rails', groups: [:development, :test]
 gem 'nokogiri'
 gem 'rubyXL'
 gem 'watir'
@@ -24,6 +23,7 @@ gem 'uglifier'
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 2.13'
+  gem 'dotenv-rails'
   gem 'selenium-webdriver'
 end
 
