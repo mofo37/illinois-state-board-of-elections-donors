@@ -11,7 +11,7 @@ gem 'watir'
 gem 'rails', '~> 5.1.4'
 
 # Database
-gem 'pg'
+gem 'pg', '~> 0.21'
 
 # Web server
 gem 'puma'
@@ -22,7 +22,7 @@ gem 'uglifier'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'capybara', '~> 2.13'
+  gem 'capybara'
   gem 'dotenv-rails'
   gem 'selenium-webdriver'
 end
