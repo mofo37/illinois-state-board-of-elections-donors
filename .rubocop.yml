@@ -15,7 +15,7 @@ AllCops:
     - '.git/**/*'
 
 IndentationConsistency:
-  EnforcedStyle: 'rails'
+  EnforcedStyle: indented_internal_methods
 
 Naming/FileName:
   Exclude:
@@ -79,9 +79,6 @@ Style/RedundantBegin:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Rails/OutputSafety:
   Enabled: false
 
 # TEMP: Nokogiri’s use of `open` from `open-uri` is being
