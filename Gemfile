@@ -8,7 +8,7 @@ gem 'rubyXL'
 gem 'watir'
 
 # App server
-gem 'rails', '~> 5.1.4'
+gem 'rails', '~> 5.2'
 
 # Database
 gem 'pg', '~> 0.21'
