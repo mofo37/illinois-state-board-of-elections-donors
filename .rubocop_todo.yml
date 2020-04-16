@@ -23,17 +23,6 @@ Lint/UselessAssignment:
   Exclude:
     - 'lib/tasks/scraper.rake'
 
-# Offense count: 8
-# Configuration parameters: CountComments, ExcludedMethods.
-# ExcludedMethods: refine
-Metrics/BlockLength:
-  Max: 153
-
-# Offense count: 3
-# Configuration parameters: CountBlocks.
-Metrics/BlockNesting:
-  Max: 4
-
 # Offense count: 1
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
