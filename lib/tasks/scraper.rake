@@ -24,6 +24,9 @@ namespace :contributions do
     rss_doc = Nokogiri::XML(open(rss_url))
     puts '==> Fetched RSS feed!'
 
+    items = rss_doc.css('item')
+
+
 
     # browser = Browser.new
     #
