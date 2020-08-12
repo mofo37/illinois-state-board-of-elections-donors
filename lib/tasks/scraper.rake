@@ -14,17 +14,42 @@ namespace :contributions do
     donors_list_url = base_url + '/CampaignDisclosure/ReportsFiled.aspx'
 
     # fetch RSS
-    puts '==> Fetching root page…'
-    root_page     = Nokogiri::HTML(open(donors_list_url))
-    puts '==> Fetched root page!'
-    rss_link_href = root_page.css('#ContentPlaceHolder1_hypRSSLatestFiledReports').attr('href')
-    rss_url       = base_url + rss_link_href
+    if false
+      puts '==> Fetching root page…'
+      root_page     = Nokogiri::HTML(open(donors_list_url))
+      puts '==> Fetched root page!'
+      rss_link_href = root_page.css('#ContentPlaceHolder1_hypRSSLatestFiledReports').attr('href')
+      rss_url       = base_url + rss_link_href
 
-    puts '==> Fetching RSS feed…'
-    rss_doc = Nokogiri::XML(open(rss_url))
-    puts '==> Fetched RSS feed!'
+      puts '==> Fetching RSS feed…'
+      rss_doc = Nokogiri::XML(open(rss_url))
+      puts '==> Fetched RSS feed!'
+    else
+      puts '==> Reading RSS file'
+      rss_doc = File.open("/Users/s/Desktop/feed.xml") { |f| Nokogiri::XML(f) }
+      puts '==> Read RSS file!'
+    end
 
+    # find a1s and b1s
     items = rss_doc.css('item')
+
+    a1s = items.map do |item|
+      item if item.css('description').text.include?('A-1')
+    end.compact
+
+    b1s = items.map do |item|
+      item if item.css('description').text.include?('B-1')
+    end.compact
+
+    # find guid and url for a1s and b1s
+    a1s.each do |item|
+      item_path = item.css('link').text
+      existing_contribution = Contribution.find_by(uid: item_path)
+
+      next if existing_contribution.present?
+
+
+    end
 
 
 
