@@ -43,12 +43,16 @@ namespace :contributions do
 
     # find guid and url for a1s and b1s
     a1s.each do |item|
-      item_path = item.css('link').text
-      existing_contribution = Contribution.find_by(uid: item_path)
+      uid = item.css('link').text
+      existing_contribution = Contribution.find_by(uid: uid)
 
       next if existing_contribution.present?
 
-
+      item_path = uid
+      item_path = item_path.sub('\Redirect', '/Redirect')
+      item_path = item_path.sub('&amp;', '&')
+      item_path = item_path.sub('amp;', '&')
+      puts item_path
     end
 
 
