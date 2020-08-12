@@ -41,19 +41,29 @@ namespace :contributions do
       item if item.css('description').text.include?('B-1')
     end.compact
 
-    # find guid and url for a1s and b1s
     a1s.each do |item|
+      # find uid for a1s, skip if contribution exists
       uid = item.css('link').text
       existing_contribution = Contribution.find_by(uid: uid)
 
       next if existing_contribution.present?
 
+      # cleanup url
       item_path = uid
       item_path = item_path.sub('\Redirect', '/Redirect')
       item_path = item_path.sub('&amp;', '&')
       item_path = item_path.sub('amp;', '&')
-      puts item_path
+
+      contribution_url = base_url + item_path
+
+      # get contribution
+      contribution_doc = Nokogiri::HTML(open(contribution_url))
+
+      # read contribution data
+      # save contribution data
     end
+
+
 
 
 
