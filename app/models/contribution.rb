@@ -1,4 +1,5 @@
 class Contribution < ApplicationRecord
+  # TODO: migration to rename column
   # validates :uid, uniqueness: true
 
   scope :on, lambda { |date|

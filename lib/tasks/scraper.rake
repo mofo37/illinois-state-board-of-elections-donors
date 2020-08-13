@@ -33,15 +33,17 @@ namespace :contributions do
     # find a1s and b1s
     items = rss_doc.css('item')
 
-    a1s = items.map do |item|
-      item if item.css('description').text.include?('A-1')
-    end.compact
+    items.each do |item|
+      description = item.css('description').text
 
-    b1s = items.map do |item|
-      item if item.css('description').text.include?('B-1')
-    end.compact
+      type = if description.include?('A-1')
+        'A'
+      elsif description.include?('B-1')
+        'B'
+      end
 
-    a1s.each do |item|
+      next if type.blank?
+
       item_uid = item.css('link').text
       existing_contributions = Contribution.where(uid: item_uid).pluck(:id)
 
