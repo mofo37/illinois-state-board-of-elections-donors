@@ -1,5 +1,5 @@
 class Contribution < ApplicationRecord
-  validates :uid, uniqueness: true
+  # validates :uid, uniqueness: true
 
   scope :on, lambda { |date|
                where(
