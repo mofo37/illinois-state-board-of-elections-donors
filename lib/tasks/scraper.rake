@@ -1,7 +1,6 @@
 require 'digest/sha1'
 
-OUTER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvReportsFiled_phPagerTemplate_gvReportsFiled_PageNext'.freeze
-INNER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvA1List_phPagerTemplate_gvA1List_PageNext'.freeze
+NEXT_LINK_ID = 'ContentPlaceHolder1_gvA1List_phPagerTemplate_gvA1List_PageNext'.freeze
 
 def strip_line_breaks str
   str.delete("\r").delete("\n")
@@ -14,7 +13,7 @@ namespace :contributions do
     donors_list_url = base_url + '/CampaignDisclosure/ReportsFiled.aspx'
 
     # fetch RSS
-    if false
+    if true
       puts '==> Fetching root page…'
       root_page     = Nokogiri::HTML(open(donors_list_url))
       puts '==> Fetched root page!'
@@ -63,38 +62,35 @@ namespace :contributions do
 
 
 
-      type = 'A'
-      inner_continue = true
-      inner_index = 1
+      continue = true
+      index = 1
 
-      while inner_continue
+      while continue
         details_table = contribution_doc.css('table#ContentPlaceHolder1_gvA1List')
-
-        # binding.irb
 
         if details_table.present?
           # walk through rows
-          details_table.css('> tr')[1..-1].each_with_index do |inner_row, inner_row_index|
+          details_table.css('> tr')[1..-1].each_with_index do |row, row_index|
             # skip pagination row
-            next if inner_row.attr('class') =~ /GridViewPagerTemplate/
+            next if row.attr('class') =~ /GridViewPagerTemplate/
 
             # grab data
-            payee           = inner_row.css('td')[0].text
-            candidate_name  = inner_row.css('td')[5].text
-            purpose         = inner_row.css('td')[4].text
+            payee           = row.css('td')[0].text
+            candidate_name  = row.css('td')[5].text
+            purpose         = row.css('td')[4].text
 
-            contributed_by  = strip_line_breaks(inner_row.css('td')[0].text.strip)
+            contributed_by  = strip_line_breaks(row.css('td')[0].text.strip)
             contributed_by  = contributed_by.split('Occupation: ').first
 
-            amount_and_date = inner_row.css('td')[2].inner_html.strip
+            amount_and_date = row.css('td')[2].inner_html.strip
             amount, date    = amount_and_date.split('<br>').map(&:strip)
             amount          = amount.sub('<span>', '')
 
             month, day, year = date.split('/')
             filed_at         = Date.parse "#{year}-#{month}-#{day}"
 
-            row_text        = inner_row.css('td').text
-            received_by     = strip_line_breaks(inner_row.css('td')[3].css('a').text.strip)
+            row_text        = row.css('td').text
+            received_by     = strip_line_breaks(row.css('td')[3].css('a').text.strip)
 
             # save data
             form = "#{type}-1"
@@ -124,31 +120,28 @@ namespace :contributions do
           end
         end
 
-        inner_pagination_links = contribution_doc.css('a')&.map { |a| a if a.text == 'Next' }
-        inner_next_link        = inner_pagination_links.compact.first
+        pagination_links = contribution_doc.css('a')&.map { |a| a if a.text == 'Next' }
+        next_link        = pagination_links.compact.first
 
         puts
         puts '*' * 80
-        puts "Details page number: #{inner_index}"
+        puts "Details page number: #{index}"
         puts '*' * 80
         puts
 
-
-        # TEMP: Don't loop on the same Contribution page
-        inner_continue = false
 
         # TODO: Handle pagination on Contribution page
-        # if !inner_next_link
-        #   inner_continue = false
-        # elsif inner_next_link.attr('disabled').blank?
-        #   # details_browser.link(id: INNER_NEXT_LINK_ID).click
-        #   # contribution_doc = Nokogiri::HTML(details_browser.html)
-        #   inner_index += 1
-        # elsif inner_next_link.attr('disabled').present?
-        #   inner_continue = false
-        # end
+        if !next_link
+          continue = false
+        elsif next_link.attr('disabled').blank?
+          contribution_doc.link(id: NEXT_LINK_ID).click
+          contribution_doc = Nokogiri::HTML(contribution_doc.html)
+          index += 1
+        elsif next_link.attr('disabled').present?
+          continue = false
+        end
 
-      end # inner_continue
+      end # continue
 
 
 
