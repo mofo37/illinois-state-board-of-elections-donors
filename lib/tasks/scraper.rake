@@ -13,7 +13,7 @@ namespace :contributions do
     donors_list_url = base_url + '/CampaignDisclosure/ReportsFiled.aspx'
 
     # fetch RSS
-    if true
+    if false
       puts '==> Fetching root page…'
       root_page     = Nokogiri::HTML(open(donors_list_url))
       puts '==> Fetched root page!'
@@ -36,10 +36,10 @@ namespace :contributions do
       description = item.css('description').text
 
       type = if description.include?('A-1')
-        'A'
-      elsif description.include?('B-1')
-        'B'
-      end
+               'A'
+             elsif description.include?('B-1')
+               'B'
+             end
 
       next if type.blank?
 
@@ -56,6 +56,10 @@ namespace :contributions do
 
       contribution_url = base_url + item_path
 
+      # for pagination
+      contribution_browser = Browser.new
+      contribution_browser.goto contribution_url
+
       # get contribution
       contribution_doc = Nokogiri::HTML(open(contribution_url))
 
@@ -69,10 +73,21 @@ namespace :contributions do
         details_table = contribution_doc.css('table#ContentPlaceHolder1_gvA1List')
 
         if details_table.present?
+          rows = if contribution_doc.css("##{NEXT_LINK_ID}").present?
+                   details_table.css('tr')[1..-3]
+                 else
+                   details_table.css('tr')[1..-1]
+                 end
+
           # walk through rows
-          details_table.css('> tr')[1..-1].each_with_index do |row, row_index|
+          rows.each_with_index do |row, row_index|
             # skip pagination row
-            next if row.attr('class') =~ /GridViewPagerTemplate/
+            # next if row.attr('class') =~ /header/
+            break if row.attr('class') =~ /GridViewPagerTemplate/
+
+
+            binding.irb if row.css('td')[5].nil?
+
 
             # grab data
             payee           = row.css('td')[0].text
@@ -129,24 +144,26 @@ namespace :contributions do
         puts '*' * 80
         puts
 
+        # fetch the url
 
-        # TODO: Handle pagination on Contribution page
         if !next_link
           continue = false
-        elsif next_link.attr('disabled').blank?
-          contribution_doc.link(id: NEXT_LINK_ID).click
-          contribution_doc = Nokogiri::HTML(contribution_doc.html)
+          contribution_browser.close
+        elsif next_link.present?
+          puts "*"*80
+          puts "in elsif next_link.attr('disabled').blank?"
+          puts "*"*80
+
+          contribution_browser.link(id: NEXT_LINK_ID).click
+
+          contribution_doc = Nokogiri::HTML(contribution_browser.html)
           index += 1
         elsif next_link.attr('disabled').present?
           continue = false
+          contribution_browser.close
         end
 
       end # continue
-
-
-
-
-
 
     end # a1s.each
 
