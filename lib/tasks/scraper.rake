@@ -60,8 +60,31 @@ namespace :contributions do
       contribution_browser = Browser.new
       contribution_browser.goto contribution_url
 
-      # get contribution
-      contribution_doc = Nokogiri::HTML(HTTP.follow.get(contribution_url).to_s)
+      # get contribution, account for website timeout
+      inner_attempts = 0
+      contribution_page_html = nil
+
+      loop do
+        begin
+          contribution_page_html = HTTP.follow.get(contribution_url).to_s
+        rescue Errno::ETIMEDOUT, HTTP::ConnectionError
+          inner_attempts += 1
+          puts "WARNING: 'HTTP.follow.get(contribution_url).to_s' timed out #{inner_attempts} times."
+          sleep 5 * inner_attempts
+        end
+
+        if inner_attempts > 3
+          puts "ERROR: 'HTTP.follow.get(contribution_url).to_s' timed out 3 times. Exiting…"
+          exit 1
+        end
+
+        break if contribution_page_html.present?
+      end
+
+
+
+      # make ready for contribution data extraction
+      contribution_doc = Nokogiri::HTML(contribution_page_html)
 
 
 
@@ -147,18 +170,13 @@ namespace :contributions do
         puts '*' * 80
         puts
 
-        # fetch the url
 
         if !next_link
           continue = false
           contribution_browser.close
         elsif next_link.present?
-          puts "*"*80
-          puts "in elsif next_link.attr('disabled').blank?"
-          puts "*"*80
-
+          # fetch the next page
           contribution_browser.link(id: NEXT_LINK_ID).click
-
           contribution_doc = Nokogiri::HTML(contribution_browser.html)
           index += 1
         elsif next_link.attr('disabled').present?
