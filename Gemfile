@@ -3,6 +3,7 @@ ruby '~> 2.6.6'
 
 gem 'aws-sdk'
 gem 'chromedriver-helper'
+gem 'http'
 gem 'nokogiri'
 gem 'rubyXL'
 gem 'watir'
