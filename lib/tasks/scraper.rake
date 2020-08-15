@@ -13,15 +13,15 @@ namespace :contributions do
     donors_list_url = base_url + '/CampaignDisclosure/ReportsFiled.aspx'
 
     # fetch RSS
-    if false
+    if true && false
       puts '==> Fetching root page…'
-      root_page     = Nokogiri::HTML(open(donors_list_url))
+      root_page     = Nokogiri::HTML(HTTP.follow.get(donors_list_url).to_s)
       puts '==> Fetched root page!'
       rss_link_href = root_page.css('#ContentPlaceHolder1_hypRSSLatestFiledReports').attr('href')
       rss_url       = base_url + rss_link_href
 
       puts '==> Fetching RSS feed…'
-      rss_doc = Nokogiri::XML(open(rss_url))
+      rss_doc = Nokogiri::XML(HTTP.follow.get(rss_url).to_s)
       puts '==> Fetched RSS feed!'
     else
       puts '==> Reading RSS file'
@@ -61,7 +61,7 @@ namespace :contributions do
       contribution_browser.goto contribution_url
 
       # get contribution
-      contribution_doc = Nokogiri::HTML(open(contribution_url))
+      contribution_doc = Nokogiri::HTML(HTTP.follow.get(contribution_url).to_s)
 
 
 
