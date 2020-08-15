@@ -21,12 +21,12 @@ namespace :contributions do
       the_day        = Time.parse "#{year}-#{month}-#{day}"
       the_day_before = the_day - 1.day
 
-      year  = the_day_before.year.to_s.rjust  2, '0'
+      year  = the_day_before.year.to_s.rjust  4, '20'
       month = the_day_before.month.to_s.rjust 2, '0'
       day   = the_day_before.day.to_s.rjust   2, '0'
     end
 
-    year  = year.to_s.rjust  2, '0'
+    year  = year.to_s.rjust  4, '20'
     month = month.to_s.rjust 2, '0'
     day   = day.to_s.rjust   2, '0'
 

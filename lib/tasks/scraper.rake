@@ -102,6 +102,9 @@ namespace :contributions do
             amount          = amount.sub('<span>', '')
 
             month, day, year = date.split('/')
+            month = month.to_s.rjust 2, '0'
+            day   = day.to_s.rjust   2, '0'
+
             filed_at         = Date.parse "#{year}-#{month}-#{day}"
 
             row_text        = row.css('td').text
