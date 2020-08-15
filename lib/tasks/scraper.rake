@@ -44,11 +44,17 @@ namespace :contributions do
       # skip non-A1s/B1s
       next if type.blank?
 
-      item_uid = item.css('link').text
+      item_pubdate           = item.css('pubDate').text
+      item_uid               = item.css('link').text
       existing_contributions = Contribution.where(uid: item_uid).pluck(:id)
 
       # don't re-fetch contributions that're already saved
-      next if existing_contributions.present?
+      if existing_contributions.present?
+        puts "==> Skipping already process RSS item: #{item_pubdate} : #{item_uid}"
+        puts "    Existing Contributions: #{existing_contributions.join ' '}"
+        puts
+        next
+      end
 
       # cleanup url
       item_path = item_uid
@@ -106,7 +112,7 @@ namespace :contributions do
                    details_table.css('tr')[1..-1]
                  end
 
-          # walk through rows
+          # iterate through rows
           rows.each_with_index do |row, row_index|
             # skip pagination row
             # next if row.attr('class') =~ /SearchListTableHeaderRow/
@@ -179,8 +185,6 @@ namespace :contributions do
         end
 
       end # continue
-
     end # items.each
-
   end # task
 end # namespace
