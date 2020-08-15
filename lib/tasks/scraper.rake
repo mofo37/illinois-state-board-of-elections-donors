@@ -75,7 +75,7 @@ namespace :contributions do
       loop do
         begin
           contributions_to_payee_html = HTTP.follow.get(contributions_to_payee_url).to_s
-        rescue Errno::ETIMEDOUT, HTTP::ConnectionError
+        rescue Errno::ETIMEDOUT, HTTP::ConnectionError, Net::ReadTimeout
           inner_attempts += 1
           puts "WARNING: 'HTTP.follow.get(contributions_to_payee_url).to_s' timed out #{inner_attempts} times."
           sleep 5 * inner_attempts
