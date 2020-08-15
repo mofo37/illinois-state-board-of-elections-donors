@@ -41,11 +41,13 @@ namespace :contributions do
                'B'
              end
 
+      # skip non-A1s/B1s
       next if type.blank?
 
       item_uid = item.css('link').text
       existing_contributions = Contribution.where(uid: item_uid).pluck(:id)
 
+      # don't re-fetch contributions that're already saved
       next if existing_contributions.present?
 
       # cleanup url
@@ -60,7 +62,7 @@ namespace :contributions do
       contribution_browser = Browser.new
       contribution_browser.goto contributions_to_payee_url
 
-      # get contribution, account for website timeout
+      # get contributions, account for website timeout
       inner_attempts = 0
       contributions_to_payee_html = nil
 
@@ -81,14 +83,10 @@ namespace :contributions do
         break if contributions_to_payee_html.present?
       end
 
-
-
       # make ready for contribution data extraction
       contribution_doc = Nokogiri::HTML(contributions_to_payee_html)
 
-
-
-
+      # loop through table of contributions, skipping header/footer row
       continue = true
       index = 1
 
@@ -96,6 +94,12 @@ namespace :contributions do
         details_table = contribution_doc.css('table#ContentPlaceHolder1_gvA1List')
 
         if details_table.present?
+          puts
+          puts '*' * 80
+          puts "Starting details page number: #{index}"
+          puts '*' * 80
+          puts
+
           rows = if contribution_doc.css("##{NEXT_LINK_ID}").present?
                    details_table.css('tr')[1..-3]
                  else
@@ -105,12 +109,8 @@ namespace :contributions do
           # walk through rows
           rows.each_with_index do |row, row_index|
             # skip pagination row
-            # next if row.attr('class') =~ /header/
+            # next if row.attr('class') =~ /SearchListTableHeaderRow/
             break if row.attr('class') =~ /GridViewPagerTemplate/
-
-
-            binding.irb if row.css('td')[5].nil?
-
 
             # grab data
             payee           = row.css('td')[0].text
@@ -125,17 +125,17 @@ namespace :contributions do
             amount          = amount.sub('<span>', '')
 
             month, day, year = date.split('/')
-            month = month.to_s.rjust 2, '0'
-            day   = day.to_s.rjust   2, '0'
+            month            = month.to_s.rjust 2, '0'
+            day              = day.to_s.rjust   2, '0'
 
             filed_at         = Date.parse "#{year}-#{month}-#{day}"
 
             row_text        = row.css('td').text
             received_by     = strip_line_breaks(row.css('td')[3].css('a').text.strip)
 
-            # save data
-            form = "#{type}-1"
+            form            = "#{type}-1"
 
+            # save data
             contribution = Contribution.create!(
               form:           form,
               contributed_by: contributed_by,
@@ -161,15 +161,9 @@ namespace :contributions do
           end
         end
 
+        # find if there's are more pages
         pagination_links = contribution_doc.css('a')&.map { |a| a if a.text == 'Next' }
         next_link        = pagination_links.compact.first
-
-        puts
-        puts '*' * 80
-        puts "Details page number: #{index}"
-        puts '*' * 80
-        puts
-
 
         if !next_link
           continue = false
@@ -186,7 +180,7 @@ namespace :contributions do
 
       end # continue
 
-    end # a1s.each
+    end # items.each
 
   end # task
 end # namespace
