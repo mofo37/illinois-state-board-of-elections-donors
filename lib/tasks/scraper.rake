@@ -54,37 +54,37 @@ namespace :contributions do
       item_path = item_path.sub('&amp;', '&')
       item_path = item_path.sub('amp;', '&')
 
-      contribution_url = base_url + item_path
+      contributions_to_payee_url = base_url + item_path
 
       # for pagination
       contribution_browser = Browser.new
-      contribution_browser.goto contribution_url
+      contribution_browser.goto contributions_to_payee_url
 
       # get contribution, account for website timeout
       inner_attempts = 0
-      contribution_page_html = nil
+      contributions_to_payee_html = nil
 
       loop do
         begin
-          contribution_page_html = HTTP.follow.get(contribution_url).to_s
+          contributions_to_payee_html = HTTP.follow.get(contributions_to_payee_url).to_s
         rescue Errno::ETIMEDOUT, HTTP::ConnectionError
           inner_attempts += 1
-          puts "WARNING: 'HTTP.follow.get(contribution_url).to_s' timed out #{inner_attempts} times."
+          puts "WARNING: 'HTTP.follow.get(contributions_to_payee_url).to_s' timed out #{inner_attempts} times."
           sleep 5 * inner_attempts
         end
 
         if inner_attempts > 3
-          puts "ERROR: 'HTTP.follow.get(contribution_url).to_s' timed out 3 times. Exiting…"
+          puts "ERROR: 'HTTP.follow.get(contributions_to_payee_url).to_s' timed out 3 times. Exiting…"
           exit 1
         end
 
-        break if contribution_page_html.present?
+        break if contributions_to_payee_html.present?
       end
 
 
 
       # make ready for contribution data extraction
-      contribution_doc = Nokogiri::HTML(contribution_page_html)
+      contribution_doc = Nokogiri::HTML(contributions_to_payee_html)
 
 
 
