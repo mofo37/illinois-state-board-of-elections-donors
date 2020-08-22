@@ -12,8 +12,15 @@ namespace :contributions do
     base_url        = 'https://www.elections.il.gov'
     donors_list_url = base_url + '/CampaignDisclosure/ReportsFiled.aspx'
 
+    puts donors_list_url
+
     # fetch RSS
-    if true && false
+    if ENV["USE_RSS_FILE"].present?
+      # From a file for faster development feedback loop
+      puts '==> Reading RSS file'
+      rss_doc = File.open(Rails.root.join 'feed.xml') { |f| Nokogiri::XML(f) }
+      puts '==> Read RSS file!'
+    else
       puts '==> Fetching root page…'
       root_page     = Nokogiri::HTML(HTTP.follow.get(donors_list_url).to_s)
       puts '==> Fetched root page!'
@@ -23,10 +30,6 @@ namespace :contributions do
       puts '==> Fetching RSS feed…'
       rss_doc = Nokogiri::XML(HTTP.follow.get(rss_url).to_s)
       puts '==> Fetched RSS feed!'
-    else
-      puts '==> Reading RSS file'
-      rss_doc = File.open("/Users/s/Desktop/feed.xml") { |f| Nokogiri::XML(f) }
-      puts '==> Read RSS file!'
     end
 
     # find a1s and b1s
