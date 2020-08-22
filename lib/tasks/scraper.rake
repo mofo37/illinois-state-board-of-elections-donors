@@ -109,17 +109,13 @@ namespace :contributions do
           puts '*' * 80
           puts
 
-          rows = if contribution_doc.css("##{NEXT_LINK_ID}").present?
-                   details_table.css('tr')[1..-3]
-                 else
-                   details_table.css('tr')[1..-1]
-                 end
+          rows = details_table.css('tr')
 
           # iterate through rows
           rows.each_with_index do |row, row_index|
             # skip pagination row
-            # next if row.attr('class') =~ /SearchListTableHeaderRow/
-            break if row.attr('class') =~ /GridViewPagerTemplate/
+            next  if row.attr('class').match? /SearchListTableHeaderRow/
+            break if row.attr('class').match? /GridViewPagerTemplate/
 
             # grab data
             payee           = row.css('td')[0].text
@@ -173,8 +169,6 @@ namespace :contributions do
         # find if there's are more pages
         pagination_links = contribution_doc.css('a')&.map { |a| a if a.text == 'Next' }
         next_link        = pagination_links.compact.first
-
-        binding.irb
 
         puts "!!! INFO: ABOUT TO CHECK NAV LINKS"
         if next_link.present?
