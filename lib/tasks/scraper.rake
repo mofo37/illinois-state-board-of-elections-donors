@@ -174,15 +174,18 @@ namespace :contributions do
         pagination_links = contribution_doc.css('a')&.map { |a| a if a.text == 'Next' }
         next_link        = pagination_links.compact.first
 
-        if !next_link
-          continue = false
-          contribution_browser.close
-        elsif next_link.present?
+        binding.irb
+
+        puts "!!! INFO: ABOUT TO CHECK NAV LINKS"
+        if next_link.present?
+          puts "!!! INFO: IN NAV LINKS IF"
           # fetch the next page
           contribution_browser.link(id: NEXT_LINK_ID).click
           contribution_doc = Nokogiri::HTML(contribution_browser.html)
           index += 1
-        elsif next_link.attr('disabled').present?
+        else
+          puts "!!! INFO: IN NAV LINKS ELSE"
+          # that was the last page, end this loop and move on to next contribution item
           continue = false
           contribution_browser.close
         end
