@@ -48,19 +48,19 @@ namespace :contributions do
       next if type.blank?
 
       item_pubdate           = item.css('pubDate').text
-      item_uid               = item.css('link').text
-      existing_contributions = Contribution.where(uid: item_uid).pluck(:id)
+      item_guid              = item.css('link').text
+      existing_contributions = Contribution.where(rss_item_guid: item_guid).pluck(:id)
 
       # don't re-fetch contributions that're already saved
       if existing_contributions.present?
-        puts "==> Skipping already process RSS item: #{item_pubdate} : #{item_uid}"
+        puts "==> Skipping already process RSS item: #{item_pubdate} : #{item_guid}"
         puts "    Existing Contributions: #{existing_contributions.join ' '}"
         puts
         next
       end
 
       # cleanup url
-      item_path = item_uid
+      item_path = item_guid
       item_path = item_path.sub('\Redirect', '/Redirect')
       item_path = item_path.sub('&amp;', '&')
       item_path = item_path.sub('amp;', '&')
@@ -114,8 +114,8 @@ namespace :contributions do
           # iterate through rows
           rows.each_with_index do |row, row_index|
             # skip pagination row
-            next  if row.attr('class').match? /SearchListTableHeaderRow/
-            break if row.attr('class').match? /GridViewPagerTemplate/
+            next  if row.attr('class').to_s.match? /SearchListTableHeaderRow/
+            break if row.attr('class').to_s.match? /GridViewPagerTemplate/
 
             # grab data
             payee           = row.css('td')[0].text
@@ -147,7 +147,7 @@ namespace :contributions do
               amount:         amount,
               received_by:    received_by,
               contributed_at: filed_at,
-              uid:            item_uid,
+              rss_item_guid:  item_guid,
               year:           year,
               month:          month,
               day:            day
