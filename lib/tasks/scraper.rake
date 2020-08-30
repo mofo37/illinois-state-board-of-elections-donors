@@ -47,7 +47,7 @@ namespace :contributions do
       next if type.blank?
 
       item_pubdate           = item.css('pubDate').text
-      item_guid              = item.css('link').text
+      item_guid              = item.css('guid').text
       existing_contributions = Contribution.where(rss_item_guid: item_guid).pluck(:id)
 
       # don't re-fetch contributions that're already saved
