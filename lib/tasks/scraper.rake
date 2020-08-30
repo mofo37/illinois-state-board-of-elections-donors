@@ -1,6 +1,8 @@
 require 'digest/sha1'
 
-NEXT_LINK_ID = 'ContentPlaceHolder1_gvA1List_phPagerTemplate_gvA1List_PageNext'.freeze
+NEXT_LINK_ID    = 'ContentPlaceHolder1_gvA1List_phPagerTemplate_gvA1List_PageNext'.freeze
+BASE_URL        = 'https://www.elections.il.gov'.freeze
+DONORS_LIST_URL = BASE_URL + '/CampaignDisclosure/ReportsFiled.aspx'.freeze
 
 def strip_line_breaks str
   str.delete("\r").delete("\n")
@@ -9,10 +11,7 @@ end
 namespace :contributions do
   desc 'Scrape donor site'
   task scrape: :environment do
-    base_url        = 'https://www.elections.il.gov'
-    donors_list_url = base_url + '/CampaignDisclosure/ReportsFiled.aspx'
-
-    puts donors_list_url
+    puts DONORS_LIST_URL
 
     # fetch RSS
     if ENV["USE_RSS_FILE"].present?
@@ -22,10 +21,10 @@ namespace :contributions do
       puts '==> Read RSS file!'
     else
       puts '==> Fetching root page…'
-      root_page     = Nokogiri::HTML(HTTP.follow.get(donors_list_url).to_s)
+      root_page     = Nokogiri::HTML(HTTP.follow.get(DONORS_LIST_URL).to_s)
       puts '==> Fetched root page!'
       rss_link_href = root_page.css('#ContentPlaceHolder1_hypRSSLatestFiledReports').attr('href')
-      rss_url       = base_url + rss_link_href
+      rss_url       = BASE_URL + rss_link_href
 
       puts '==> Fetching RSS feed…'
       rss_doc = Nokogiri::XML(HTTP.follow.get(rss_url).to_s)
@@ -65,7 +64,7 @@ namespace :contributions do
       item_path = item_path.sub('&amp;', '&')
       item_path = item_path.sub('amp;', '&')
 
-      contributions_to_payee_url = base_url + item_path
+      contributions_to_payee_url = BASE_URL + item_path
 
       # for pagination
       contribution_browser = Browser.new
