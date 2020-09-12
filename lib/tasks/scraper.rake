@@ -7,7 +7,7 @@ def strip_line_breaks str
   str.delete("\r").delete("\n")
 end
 
-namespace :contributions do
+namespace :go do
   desc 'Scrape donor site'
   task scrape: :environment do
     base_url        = 'https://www.elections.il.gov/CampaignDisclosure/'

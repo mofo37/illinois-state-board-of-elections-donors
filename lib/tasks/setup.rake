@@ -1,4 +1,4 @@
-namespace :contributions do
+namespace :go do
   desc 'Setup contributions in db for spreadsheet'
   task :setup, [:year, :month, :day] => :environment do |_, args|
     puts

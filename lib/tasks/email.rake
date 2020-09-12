@@ -1,4 +1,4 @@
-namespace :contributions do
+namespace :go do
   desc 'Email spreadsheet to subscribers'
   task email: :environment do
     # build or get the spreadsheet file

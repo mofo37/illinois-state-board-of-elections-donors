@@ -1,4 +1,4 @@
-namespace :contributions do
+namespace :go do
   desc "Create spreadsheet of today's contributions"
   task spreadsheet: :environment do
     puts 'Finding A1s and B1s'
