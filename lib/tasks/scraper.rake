@@ -10,8 +10,8 @@ end
 namespace :go do
   desc 'Scrape donor site'
   task scrape: :environment do
-    base_url        = 'https://www.elections.il.gov/CampaignDisclosure/'
-    donors_list_url = base_url + 'ReportsFiled.aspx'
+    base_url        = 'https://www.elections.il.gov/'
+    donors_list_url = base_url + 'CampaignDisclosure/ReportsFiled.aspx'
 
     browser = Browser.new
 
@@ -80,6 +80,12 @@ namespace :go do
         details_path = report_type_td.css('a').attr('href')
 
         details_url = base_url + details_path
+
+        # The <a href> begins with a wrong slash, and fails when we fetch it
+        #   So, we delete it before fetching (double \\ to escape the one slash)
+        #   \Redirect.aspx?URL=AIa%2f%2fYF%2b
+        details_url.delete! '\\'
+
         puts details_url
 
         # fetch the url
