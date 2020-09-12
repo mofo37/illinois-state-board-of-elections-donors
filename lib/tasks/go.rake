@@ -1,3 +1,3 @@
 desc "Run all rake tasks to generate today’s spreadsheet"
-task go: [:scrape, :setup, :spreadsheet] do
+task go: ['go:scrape', 'go:setup', 'go:spreadsheet'] do
 end
