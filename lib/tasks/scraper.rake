@@ -1,7 +1,6 @@
 require 'digest/sha1'
 
 OUTER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvReportsFiled_phPagerTemplate_gvReportsFiled_PageNext'.freeze
-INNER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvA1List_phPagerTemplate_gvA1List_PageNext'.freeze
 
 def strip_line_breaks str
   str.delete("\r").delete("\n")
@@ -167,7 +166,7 @@ namespace :go do
               puts
 
               # only scrape recent few days
-              next unless contribution.contributed_at < 3.days.ago
+              next unless contribution.contributed_at < 5.days.ago
 
               puts 'SUCCESS! Scraped all of the recent contributions.'
               continue       = false
@@ -189,7 +188,8 @@ namespace :go do
             inner_continue = false
             details_browser.close
           elsif inner_next_link.attr('disabled').blank?
-            details_browser.link(id: INNER_NEXT_LINK_ID).click
+            inner_next_link_id = inner_next_link.attr('id')
+            details_browser.link(id: inner_next_link_id).click
             details_doc = Nokogiri::HTML(details_browser.html)
             inner_index += 1
           elsif inner_next_link.attr('disabled').present?
