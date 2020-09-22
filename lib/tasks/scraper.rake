@@ -192,8 +192,8 @@ namespace :go do
             # Close Census popover modal which blocks the click on Next page link
             if details_doc.css("##{CENSUS_MODAL_ID}").present?
               puts "Closing Census modal…"
-              browser.checkbox(id: 'chkCensusDontShowAgain').set
-              browser.button(value: 'Close').click
+              details_browser.checkbox(id: 'chkCensusDontShowAgain').set
+              details_browser.button(value: 'Close').click
               puts "Sleeping for 3 seconds…"
               sleep 3
             end
