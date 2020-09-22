@@ -1,6 +1,7 @@
 require 'digest/sha1'
 
 OUTER_NEXT_LINK_ID = 'ContentPlaceHolder1_gvReportsFiled_phPagerTemplate_gvReportsFiled_PageNext'.freeze
+CENSUS_MODAL_ID = 'pnlCensusMessage'
 
 def strip_line_breaks str
   str.delete("\r").delete("\n")
@@ -86,6 +87,7 @@ namespace :go do
         details_url.delete! '\\'
 
         puts details_url
+        puts
 
         # fetch the url
         details_browser = Browser.new
@@ -178,7 +180,6 @@ namespace :go do
           inner_pagination_links = details_doc.css('a')&.map { |a| a if a.text == 'Next' }
           inner_next_link        = inner_pagination_links.compact.first
 
-          puts
           puts '*' * 80
           puts "Details page number: #{inner_index}"
           puts '*' * 80
@@ -188,6 +189,16 @@ namespace :go do
             inner_continue = false
             details_browser.close
           elsif inner_next_link.attr('disabled').blank?
+            # Close Census popover modal which blocks the click on Next page link
+            if details_doc.css("##{CENSUS_MODAL_ID}").present?
+              puts "Closing Census modal…"
+              browser.checkbox(id: 'chkCensusDontShowAgain').set
+              browser.button(value: 'Close').click
+              puts "Sleeping for 3 seconds…"
+              sleep 3
+            end
+
+            puts "Clicking inner next link…"
             inner_next_link_id = inner_next_link.attr('id')
             details_browser.link(id: inner_next_link_id).click
             details_doc = Nokogiri::HTML(details_browser.html)
@@ -203,12 +214,22 @@ namespace :go do
         break unless continue
       end
 
+      # Close Census popover modal which blocks the click on Next page link
+      if doc.css("##{CENSUS_MODAL_ID}").present?
+        puts "Closing Census modal…"
+        browser.checkbox(id: 'chkCensusDontShowAgain').set
+        browser.button(value: 'Close').click
+        puts "Sleeping for 3 seconds…"
+        sleep 3
+      end
+
       # find next link
       pagination_links = doc.css('a')&.map { |a| a if a.text == 'Next' }
       next_link        = pagination_links.compact.first
 
       # don't click next link if on last page
       if next_link.present?
+        puts "Clicking outer next link…"
         browser.link(id: OUTER_NEXT_LINK_ID).click
         doc = Nokogiri::HTML(browser.html)
         index += 1
